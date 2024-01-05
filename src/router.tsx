@@ -3,7 +3,7 @@ import { HomePage } from './pages/home.page';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/fun-hub/',
     element: <HomePage />,
   },
 ]);
