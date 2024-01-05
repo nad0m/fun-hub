@@ -20,7 +20,7 @@
     "paths": {
       "@games/*": ["./games/*"],
       "@components/*": ["./components/*"],
-      "@test-utils": ["./test-utils"]
+      "@test-utils": ["../test-utils"]
     }
   },
   "include": ["src", "test-utils"]
