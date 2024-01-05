@@ -5,5 +5,6 @@ module.exports = {
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'consistent-return': 'off',
   },
 };

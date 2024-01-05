@@ -16,8 +16,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"],
+      "@games/*": ["./games/*"],
+      "@components/*": ["./components/*"],
       "@test-utils": ["./test-utils"]
     }
   },
