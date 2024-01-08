@@ -11,7 +11,13 @@ export function AppTitle() {
         w={30}
         h={30}
       />
-      <Text inherit variant="gradient" component="span" gradient={{ from: 'pink', to: 'yellow' }}>
+      <Text
+        inherit
+        variant="gradient"
+        component="span"
+        gradient={{ from: 'pink', to: 'yellow' }}
+        style={{ fontSize: 32, fontWeight: 900 }}
+      >
         Fun Hub
       </Text>
     </Title>

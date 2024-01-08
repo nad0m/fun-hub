@@ -6,7 +6,7 @@ import {
   MantineColorScheme,
   Tooltip,
 } from '@mantine/core';
-import { IconSun, IconMoon, IconAdjustmentsHorizontal } from '@tabler/icons-react';
+import { IconSun, IconMoon, IconBrightness } from '@tabler/icons-react';
 import { useState } from 'react';
 import classes from './theme-toggle.module.css';
 
@@ -32,9 +32,7 @@ export function ThemeToggle() {
       >
         {nextColor === 'light' && <IconSun className={cx(classes.icon)} stroke={1.5} />}
         {nextColor === 'dark' && <IconMoon className={cx(classes.icon)} stroke={1.5} />}
-        {nextColor === 'auto' && (
-          <IconAdjustmentsHorizontal className={cx(classes.icon)} stroke={1.5} />
-        )}
+        {nextColor === 'auto' && <IconBrightness className={cx(classes.icon)} stroke={1.5} />}
       </ActionIcon>
     </Tooltip>
   );

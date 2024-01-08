@@ -3,8 +3,6 @@
   align-items: center;
   gap: 0.5rem;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-size: rem(24px);
-  font-weight: 800;
 
   @media (max-width: $mantine-breakpoint-md) {
     font-size: rem(16px);

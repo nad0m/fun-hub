@@ -4,4 +4,4 @@ export default {
   title: 'Welcome',
 };
 
-export const Usage = () => <AppTitle />;
+export const Default = () => <AppTitle />;
