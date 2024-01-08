@@ -5099,13 +5099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"atom-games@file:/Users/BigMac/Documents/github/atom-games::locator=mantine-vite-template%40workspace%3A.":
+"atom-games@npm:^1.0.10":
   version: 1.0.10
-  resolution: "atom-games@file:/Users/BigMac/Documents/github/atom-games#/Users/BigMac/Documents/github/atom-games::hash=870c9e&locator=mantine-vite-template%40workspace%3A."
+  resolution: "atom-games@npm:1.0.10"
   dependencies:
     boardgame.io: "npm:0.49.8"
     tsup: "npm:^8.0.1"
-  checksum: 4036b3a7320c133c324063c991a49769a11b6e978ba25022a1ba91c52bf5ae2fcb91bc8c8762ad9453e4566214dac6788dc9a349cddd341bca8ba10744a8e2b0
+  checksum: 0d0f1e8a2c97a5a2c9907f8f112730099c290b6c9aa22a39bdffe1a8c0a19f2e96bd50ebe7f00270c008cfac555673031df14ea30f1cf6191c5cf645fe10d17b
   languageName: node
   linkType: hard
 
@@ -9850,7 +9850,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.9.1"
     "@typescript-eslint/parser": "npm:^6.9.1"
     "@vitejs/plugin-react": "npm:^4.2.1"
-    atom-games: /Users/BigMac/Documents/github/atom-games
+    atom-games: "npm:^1.0.10"
     boardgame.io: "npm:0.49.8"
     eslint: "npm:^8.53.0"
     eslint-config-airbnb: "npm:19.0.4"
