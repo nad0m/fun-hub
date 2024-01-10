@@ -10,32 +10,37 @@ import {
   Stack,
   Divider,
   Flex,
+  LoadingOverlay,
 } from '@mantine/core';
 import { FC } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { Game } from 'types';
+import { useLobbyService } from 'hooks';
+import { triggerNotification } from 'utils/trigger-notification';
+import { useNavigate } from 'react-router-dom';
 import classes from './application-card.module.css';
 
 type ApplicationCardProps = {
-  game: {
-    title: string;
-    description: string;
-    path: string;
-    thumbnail: string;
-  };
+  game: Game;
 };
 
 export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
+  const {
+    createRoomMutation: { mutate: createMatch, data, isPending, isError, isSuccess, error },
+  } = useLobbyService();
+  const navigate = useNavigate();
   const [modalOpened, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
       roomCode: '',
     },
   });
+
   return (
     <>
       <Modal
-        opened={modalOpened}
+        opened={modalOpened || isPending}
         onClose={close}
         title={
           <Text
@@ -49,15 +54,41 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           </Text>
         }
         size="md"
+        pos="relative"
       >
+        <LoadingOverlay
+          visible={isPending}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
+        {/* ...other content */}
         <Stack gap={24}>
           <Box m={0} w="100%">
             <Image src={game.thumbnail} alt={game.title} w="100%" h={120} />
           </Box>
-          <Button>Create Room for {game.title}</Button>
+          <Button
+            onClick={() =>
+              createMatch(
+                { gameId: game.id, numPlayers: 8 },
+                {
+                  onSuccess: (roomID) => {
+                    triggerNotification(
+                      'Success',
+                      `Game successfully created. Game code: ${roomID}`
+                    );
+                    navigate(`${game.path}/${roomID}`);
+                  },
+                  onError: () => {
+                    triggerNotification('Error', 'Error creating game room.');
+                  },
+                }
+              )
+            }
+          >
+            Create Room for {game.title}
+          </Button>
         </Stack>
-
-        <Divider my={24} label="OR" labelPosition="center" />
+        <Divider my={24} label={<Text>OR</Text>} labelPosition="center" />
         <Flex align="flex-end" gap={12}>
           <TextInput
             label="Join with room code"
