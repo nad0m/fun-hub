@@ -1,60 +1,40 @@
-import { Client, Lobby } from 'boardgame.io/react';
-import { TheMind, TicTacToe } from 'atom-games';
-import { TheMindBoard, TheMindClient, TicTacToeBoard } from 'games';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useBeforeUnload, useParams } from 'react-router-dom';
-import { LobbyPlayerList } from 'components';
+import { TheMindClient } from 'games';
+import { FC } from 'react';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getMatch, joinMatch } from 'services/lobby-service';
-import { SocketIO } from 'boardgame.io/multiplayer';
-import { useLobbyService } from 'hooks';
-import { Button, Loader } from '@mantine/core';
+import { joinMatch } from 'services/lobby-service';
+import { Box, Button, Loader, Modal, Text, TextInput } from '@mantine/core';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
-import { FilteredMetadata, LobbyAPI } from 'boardgame.io';
-import { POLLING_INTERVAL, SERVER_URL } from '../constants';
+import { LobbyAPI } from 'boardgame.io';
+import { Game } from 'types';
+import { useForm } from '@mantine/form';
+import { IconSend2 } from '@tabler/icons-react';
 
-export const TheMindPage: FC = () => {
+type TheMindPageProps = {
+  game: Game;
+};
+export const TheMindPage: FC<TheMindPageProps> = ({ game }) => {
   const matchID = useParams<{ roomID: string }>().roomID as string;
   const playerData = useReadLocalStorage(matchID) as LobbyAPI.JoinedMatch;
-  const [isGameReady, setIsGameReady] = useState<boolean>(false);
-  const [matchData, setMatchData] = useState<LobbyAPI.Match | undefined>(undefined);
-  const {
-    forcePlayMatchMutation: { mutate: forcePlay, isPending: forcePlayPending },
-    leaveMatchMutation: { mutate: leaveMatch },
-  } = useLobbyService();
-  const { data, isSuccess, isLoading } = useQuery({
-    queryKey: ['joinMatch'],
-    queryFn: async () => joinMatch({ gameName: 'themind', matchID, playerName: 'dev' }),
-    enabled: !playerData,
-    staleTime: Infinity,
+  const [playerName, setPlayerName] = useLocalStorage<string>('playerName', '');
+  const form = useForm({
+    initialValues: {
+      playerName: '',
+    },
   });
+
+  const { data, isSuccess, isLoading } = useQuery({
+    queryKey: ['joinMatch', { matchID, playerData }],
+    queryFn: async () => joinMatch({ gameName: 'TheMind', matchID, playerName }),
+    enabled: !playerData,
+  });
+
+  console.log(!playerData && !!playerName);
 
   const playerID = data?.playerID || playerData?.playerID;
   const playerCredentials = data?.playerCredentials || playerData?.playerCredentials;
 
-  // useQuery({
-  //   queryKey: ['getMatch'],
-  //   queryFn: async () => getMatch('themind', matchID),
-  //   refetchInterval: (refetchedData) => {
-  //     setMatchData(refetchedData.state.data);
-  //     return isGameReady ? false : POLLING_INTERVAL;
-  //   },
-  // });
-
-  // useBeforeUnload(
-  //   useCallback(() => {
-  //     leaveMatch({ gameName: 'TheMind', matchID, playerID, credentials: playerCredentials });
-  //     localStorage.removeItem(matchID);
-  //   }, [matchID, playerID, playerID, playerCredentials])
-  // );
-
-  // useEffect(
-  //   () => () =>
-  //     leaveMatch({ gameName: 'TheMind', matchID, playerID, credentials: playerCredentials }),
-  //   []
-  // );
-
-  if (isLoading || forcePlayPending) {
+  if (isLoading || !playerName) {
     return <Loader />;
   }
 
@@ -62,15 +42,50 @@ export const TheMindPage: FC = () => {
     localStorage.setItem(matchID, JSON.stringify(data));
   }
 
-  const onForcePlaySuccess = () => {
-    setIsGameReady(true);
-  };
+  console.log({ playerName });
 
   return (
-    <>
-      {/* <LobbyPlayerList matchData={matchData?.players} /> */}
+    <Box>
+      <Modal
+        opened={!playerName}
+        withCloseButton={false}
+        onClose={() => null}
+        title={
+          <Text
+            inherit
+            variant="gradient"
+            component="span"
+            gradient={{ from: 'cyan', to: 'yellow' }}
+            style={{ fontSize: 24, fontWeight: 900 }}
+          >
+            {game.title}
+          </Text>
+        }
+        size="md"
+        pos="relative"
+      >
+        <form
+          style={{ display: 'flex', alignItems: 'flex-end', gap: 12 }}
+          onSubmit={form.onSubmit((values) => setPlayerName(values.playerName))}
+        >
+          <TextInput
+            flex={5}
+            label="Name"
+            placeholder="Enter your name"
+            required
+            maxLength={16}
+            autoFocus
+            {...form.getInputProps('playerName')}
+          />
+          <Button flex={1} type="submit" variant="outline" rightSection={<IconSend2 size={16} />}>
+            Enter
+          </Button>
+        </form>
+      </Modal>
 
-      <TheMindClient playerID={playerID} credentials={playerCredentials} matchID={matchID} />
-    </>
+      {!!playerName && (
+        <TheMindClient playerID={playerID} credentials={playerCredentials} matchID={matchID} />
+      )}
+    </Box>
   );
 };

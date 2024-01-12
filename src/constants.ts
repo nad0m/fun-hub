@@ -13,6 +13,8 @@ export const GAMES_GLOSSARY: Record<string, Game> = {
     path: '/tictactoe',
     thumbnail:
       'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/tictactoe.jpeg',
+    minPlayers: 2,
+    maxPlayers: 2,
   },
   TheMind: {
     id: 'TheMind',
@@ -21,5 +23,7 @@ export const GAMES_GLOSSARY: Record<string, Game> = {
     path: '/themind',
     thumbnail:
       'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/themind.jpeg',
+    minPlayers: 2,
+    maxPlayers: 10,
   },
 };

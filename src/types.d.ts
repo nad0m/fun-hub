@@ -4,4 +4,6 @@ export type Game = {
   description: string;
   path: string;
   thumbnail: string;
+  minPlayers: number;
+  maxPlayers: number;
 };
