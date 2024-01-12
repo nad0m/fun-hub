@@ -5141,13 +5141,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"atom-games@file:/Users/BigMac/Documents/github/atom-games::locator=mantine-vite-template%40workspace%3A.":
-  version: 1.0.10
-  resolution: "atom-games@file:/Users/BigMac/Documents/github/atom-games#/Users/BigMac/Documents/github/atom-games::hash=1202aa&locator=mantine-vite-template%40workspace%3A."
+"atom-games@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "atom-games@npm:1.0.11"
   dependencies:
     boardgame.io: "npm:0.49.8"
     tsup: "npm:^8.0.1"
-  checksum: 0776f77b23bd291d89ac91e4600f222ae824c9203ceec589544e69a777e080e2c4da51597a79fb01e361bc2827a2ee66932389529661e69af86d712f1a51dbee
+  checksum: f5f01e6a59eebd85734ea2e51af271549e370803d1ffd1cf6b786a91451f584bbf243f5382e641c2db2ef677ff138fee9cf4b82894dba7a287d78267eeb38909
   languageName: node
   linkType: hard
 
@@ -9553,13 +9553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ky@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "ky@npm:1.2.0"
-  checksum: 4bd9475c2f07e43c81eff1e4dd1d672f63869370b4ba741ca7060446bf4e2716f99801344dcae65f550c2a5eeac5221c65319571923666257efc7aa66d527268
-  languageName: node
-  linkType: hard
-
 "language-subtag-registry@npm:^0.3.20":
   version: 0.3.22
   resolution: "language-subtag-registry@npm:0.3.22"
@@ -9911,7 +9904,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.9.1"
     "@typescript-eslint/parser": "npm:^6.9.1"
     "@vitejs/plugin-react": "npm:^4.2.1"
-    atom-games: /Users/BigMac/Documents/github/atom-games
+    atom-games: "npm:^1.0.11"
     boardgame.io: "npm:0.49.8"
     eslint: "npm:^8.53.0"
     eslint-config-airbnb: "npm:19.0.4"
@@ -9923,7 +9916,6 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     identity-obj-proxy: "npm:^3.0.0"
     jsdom: "npm:^23.0.1"
-    ky: "npm:^1.2.0"
     plop: "npm:^4.0.1"
     postcss: "npm:^8.4.32"
     postcss-preset-mantine: "npm:1.12.3"
