@@ -8,5 +8,5 @@ export const TheMindClient = Client({
   game: TheMind,
   board: TheMindBoard,
   multiplayer: SocketIO({ server: SERVER_URL }),
-  debug: false,
+  debug: true,
 });

@@ -26,7 +26,7 @@ export const TheMindPage: FC<TheMindPageProps> = ({ game }) => {
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ['joinMatch', { matchID, playerData }],
     queryFn: async () => joinMatch({ gameName: 'TheMind', matchID, playerName }),
-    enabled: !playerData,
+    enabled: !playerData && !!playerName,
   });
 
   console.log(!playerData && !!playerName);
@@ -34,7 +34,7 @@ export const TheMindPage: FC<TheMindPageProps> = ({ game }) => {
   const playerID = data?.playerID || playerData?.playerID;
   const playerCredentials = data?.playerCredentials || playerData?.playerCredentials;
 
-  if (isLoading || !playerName) {
+  if (isLoading) {
     return <Loader />;
   }
 
