@@ -1,4 +1,6 @@
-export type Game = {
+import type { Client } from 'boardgame.io/react';
+
+export type GameConfig = {
   id: string;
   title: string;
   description: string;
@@ -6,4 +8,11 @@ export type Game = {
   thumbnail: string;
   minPlayers: number;
   maxPlayers: number;
+};
+
+export type GameClient = ReturnType<typeof Client>;
+
+export type GamePageProps = {
+  gameConfig: Game;
+  GameClientComponent: GameClient;
 };

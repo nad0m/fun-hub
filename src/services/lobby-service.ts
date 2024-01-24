@@ -2,7 +2,7 @@ import { LobbyAPI } from 'boardgame.io';
 import { LobbyClient } from 'boardgame.io/client';
 
 const SERVER_URL = import.meta.env.VITE_ATOM_SOCKET_API;
-const FORCE_DELAY_MS = 2000;
+const FORCE_DELAY_MS = 1000;
 
 export interface Player {
   id: number;
@@ -42,53 +42,57 @@ export const createMatch = async ({
   return data.matchID;
 };
 
-export const getMatch = async (gameName: string, matchID: string): Promise<LobbyAPI.Match> => {
+export const getMatch = async (
+  gameID: string,
+  matchID: string
+): Promise<LobbyAPI.Match> => {
   await new Promise((resolve) => {
     setTimeout(resolve, FORCE_DELAY_MS);
   });
 
-  const data = await lobbyClient.getMatch(gameName, matchID);
+  const data = await lobbyClient.getMatch(gameID, matchID);
 
   return data;
 };
 
 export const joinMatch = async ({
-  gameName,
+  gameID,
   matchID,
   playerName,
 }: {
-  gameName: string;
+  gameID: string;
   matchID: string;
   playerName: string;
 }): Promise<LobbyAPI.JoinedMatch> => {
+  // is this for testing, or needed?
   await new Promise((resolve) => {
     setTimeout(resolve, FORCE_DELAY_MS);
   });
 
-  const data = await lobbyClient.joinMatch(gameName, matchID, { playerName });
+  const data = await lobbyClient.joinMatch(gameID, matchID, { playerName });
 
   return data;
 };
 
 export const leaveMatch = async ({
-  gameName,
+  gameID,
   matchID,
   playerID,
   credentials,
 }: {
-  gameName: string;
+  gameID: string;
   matchID: string;
   playerID: string;
   credentials: string;
 }): Promise<void> => {
-  await lobbyClient.leaveMatch(gameName, matchID, { playerID, credentials });
+  await lobbyClient.leaveMatch(gameID, matchID, { playerID, credentials });
 };
 
 export const getMatchMetadata = async (
-  gameName: string,
+  gameID: string,
   matchID: string
 ): Promise<LobbyAPI.Match> => {
-  const matchMetadata = await lobbyClient.getMatch(gameName, matchID);
+  const matchMetadata = await lobbyClient.getMatch(gameID, matchID);
 
   return matchMetadata;
 };
