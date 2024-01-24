@@ -1,1 +1,5 @@
-module.exports = require('eslint-config-mantine/.prettierrc.js');
+const base = require('eslint-config-mantine/.prettierrc.js');
+module.exports = {
+  ...base,
+  printWidth: 80,
+};

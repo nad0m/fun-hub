@@ -1,7 +1,12 @@
 import React from 'react';
 import { BoardProps } from 'boardgame.io/react';
 import { TheMindState } from 'atom-games';
-import { CopyToClipboardInput, CountDown, GameLobby, LobbyPlayerList } from 'components';
+import {
+  CopyToClipboardInput,
+  CountDown,
+  GameLobby,
+  LobbyPlayerList,
+} from 'components';
 import {
   Button,
   Switch,
@@ -16,12 +21,14 @@ import {
 } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 import { useLocation } from 'react-router-dom';
-import { GAMES_GLOSSARY } from '../../constants';
+import { GAMES_GLOSSARY } from 'config/games';
 
 const GAME_NAME = 'TheMind';
 const GAME_PHASE_READY_UP = 'readyUpPhase';
 
-export const TheMindBoard: React.FunctionComponent<BoardProps<TheMindState>> = ({
+export const TheMindBoard: React.FunctionComponent<
+  BoardProps<TheMindState>
+> = ({
   G,
   ctx,
   playerID,
@@ -35,7 +42,9 @@ export const TheMindBoard: React.FunctionComponent<BoardProps<TheMindState>> = (
   const { phase, currentPlayer } = ctx;
 
   if (phase === 'readyUpPhase') {
-    const allPlayersReady = Object.values(G.players).every((player) => player.isReady);
+    const allPlayersReady = Object.values(G.players).every(
+      (player) => player.isReady
+    );
 
     return (
       <GameLobby gameMetadata={GAMES_GLOSSARY[GAME_NAME]} copyPasteUrl={url}>
