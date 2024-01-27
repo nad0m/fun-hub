@@ -10,7 +10,8 @@
     "clean": "rm -rf node_modules && rm -rf client/node_modules && rm -rf server/node_modules && rm -rf games/node_modules",
     "ci": "yarn clean && yarn install"
   },
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^8.2.2"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
