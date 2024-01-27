@@ -18,8 +18,9 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "@test-utils": ["../test-utils"]
-    }
+      "@games": ["../../games/src/index"],
+      "@test-utils": ["../test-utils"],
+    },
   },
-  "include": ["src", "test-utils", "plop"]
+  "include": ["src", "test-utils", "plop"],
 }

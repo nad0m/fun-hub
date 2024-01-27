@@ -1,4 +1,4 @@
-import { TheMind } from 'atom-games';
+import { TheMind } from '@games';
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { SERVER_URL } from 'config/constants';

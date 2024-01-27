@@ -23,7 +23,7 @@ import {
   IconHandClick,
   IconCircleDotted,
 } from '@tabler/icons-react';
-import { TheMindState } from 'atom-games';
+import { TheMindState } from '@games';
 import { FilteredMetadata } from 'boardgame.io';
 import { FC } from 'react';
 import { generateColor } from 'utils/generate-color';
@@ -50,7 +50,8 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
     <Stack>
       {matchData?.map((player) => {
         const playerColor = generateColor(player.id) || 'gray';
-        const playerNamePostfix = clientPlayerID === player.id.toString() ? ' (You)' : '';
+        const playerNamePostfix =
+          clientPlayerID === player.id.toString() ? ' (You)' : '';
         const { isReady } = gameState.players[clientPlayerID as string];
 
         return (
@@ -89,7 +90,13 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
               size="xs"
               color={isReady ? 'teal' : 'gray'}
               onClick={() => moves?.toggleReady()}
-              rightSection={isReady ? <IconCheck size={16} /> : <IconCircleDotted size={16} />}
+              rightSection={
+                isReady ? (
+                  <IconCheck size={16} />
+                ) : (
+                  <IconCircleDotted size={16} />
+                )
+              }
               style={{
                 visibility: !playerNamePostfix ? 'hidden' : 'visible',
                 padding: '0 8px',

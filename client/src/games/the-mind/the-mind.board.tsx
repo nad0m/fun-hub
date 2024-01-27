@@ -1,6 +1,6 @@
 import React from 'react';
 import { BoardProps } from 'boardgame.io/react';
-import { TheMindState } from 'atom-games';
+import { TheMindState } from '@games';
 import {
   CopyToClipboardInput,
   CountDown,

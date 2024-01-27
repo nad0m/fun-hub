@@ -1,6 +1,6 @@
 // server.ts
 
-import { TheMind, TicTacToe } from 'atom-games';
+import { TicTacToe, TheMind } from '@games';
 import { Origins, Server } from 'boardgame.io/server';
 import { bodyParser } from '@koa/bodyparser';
 

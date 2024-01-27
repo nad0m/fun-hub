@@ -1,6 +1,16 @@
 {
+  "license": "MIT",
+  "private": true,
   "workspaces": [
-    "client"
+    "client",
+    "server"
   ],
-  "scripts": {}
+  "scripts": {
+    "dev": "concurrently \"cd client && yarn dev\" \"cd server && yarn dev\"",
+    "clean": "rm -rf node_modules && rm -rf client/node_modules && rm -rf server/node_modules && rm -rf games/node_modules",
+    "ci": "yarn clean && yarn install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
