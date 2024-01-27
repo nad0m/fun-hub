@@ -16,14 +16,14 @@ import {
 import { FC } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { Game } from 'types';
+import { GameConfig } from 'types';
 import { useLobbyService } from 'hooks';
 import { triggerNotification } from 'utils/trigger-notification';
 import { useNavigate } from 'react-router-dom';
 import classes from './application-card.module.css';
 
 type ApplicationCardProps = {
-  game: Game;
+  game: GameConfig;
 };
 
 export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
@@ -118,7 +118,11 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
             flex={6}
             {...form.getInputProps('roomCode')}
           />
-          <Button flex={1} variant="light" disabled={form.values.roomCode.length === 0}>
+          <Button
+            flex={1}
+            variant="light"
+            disabled={form.values.roomCode.length === 0}
+          >
             Join
           </Button>
         </Flex>

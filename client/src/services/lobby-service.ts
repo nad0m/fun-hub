@@ -1,7 +1,7 @@
 import { LobbyAPI } from 'boardgame.io';
 import { LobbyClient } from 'boardgame.io/client';
+import { SERVER_URL } from 'config/constants';
 
-const SERVER_URL = import.meta.env.VITE_ATOM_SOCKET_API;
 const FORCE_DELAY_MS = 1000;
 
 export interface Player {
@@ -64,6 +64,7 @@ export const joinMatch = async ({
   matchID: string;
   playerName: string;
 }): Promise<LobbyAPI.JoinedMatch> => {
+  console.log('join match request');
   // is this for testing, or needed?
   await new Promise((resolve) => {
     setTimeout(resolve, FORCE_DELAY_MS);

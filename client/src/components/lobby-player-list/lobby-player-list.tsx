@@ -41,7 +41,6 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
   clientPlayerID,
   moves,
 }) => {
-  console.log({ matchData });
   return (
     // State
 

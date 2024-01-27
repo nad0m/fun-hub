@@ -1,15 +1,16 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { useIsMounted, useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 import { LobbyAPI } from 'boardgame.io';
 import { PlayerRegister } from 'components/player-register';
 import { joinMatch } from 'services/lobby-service';
 import { isNonEmptyString, validatePlayerData } from 'utils/validators';
 import { GameClient, GamePageProps } from 'types';
+import { useIsMountedEffect } from 'hooks';
 
-const useGetPlayerData = ({
+const useGetMatchPlayerData = ({
   playerName,
   gameID,
   matchID,
@@ -22,7 +23,7 @@ const useGetPlayerData = ({
   isLoading: boolean;
   hasError: boolean;
 } => {
-  const isMounted = useIsMounted();
+  const isMounted = useIsMountedEffect();
 
   const [cachedPlayerData, setCachedPlayerData] =
     useLocalStorage<LobbyAPI.JoinedMatch | null>(matchID, null);
@@ -30,7 +31,7 @@ const useGetPlayerData = ({
   const hasValidCachedPlayerData = validatePlayerData(cachedPlayerData);
 
   const shouldEnableJoinQuery =
-    isNonEmptyString(playerName) && !hasValidCachedPlayerData;
+    isMounted && isNonEmptyString(playerName) && !hasValidCachedPlayerData;
 
   const {
     data: fetchedPlayerData = null,
@@ -52,14 +53,14 @@ const useGetPlayerData = ({
   const hasValidPlayerData = !hasFetchError && validatePlayerData(playerData);
 
   // if valid, cache it for next time...
-  if (isMounted() && !hasValidCachedPlayerData && hasValidPlayerData) {
+  if (isMounted && !hasValidCachedPlayerData && hasValidPlayerData) {
     setCachedPlayerData(playerData!);
   }
 
   return {
     playerData,
-    isLoading,
-    hasError: !hasValidPlayerData,
+    isLoading: !isMounted || isLoading,
+    hasError: isMounted && !isLoading && !hasValidPlayerData,
   };
 };
 
@@ -74,7 +75,7 @@ const PlayerCredentialsProvider = ({
   matchID: string;
   GameClientComponent: GameClient;
 }) => {
-  const { playerData, isLoading, hasError } = useGetPlayerData({
+  const { playerData, isLoading, hasError } = useGetMatchPlayerData({
     playerName,
     gameID,
     matchID,
@@ -85,7 +86,7 @@ const PlayerCredentialsProvider = ({
   }
 
   if (hasError) {
-    return <div>Uh oh. Something went wrong.</div>;
+    return <div>Uh oh. Something went wrong joining match.</div>;
   }
   // we know this is valid by now...
   const { playerID, playerCredentials } = playerData!;
