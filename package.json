@@ -6,8 +6,14 @@
     "server"
   ],
   "scripts": {
-    "dev": "concurrently \"cd client && yarn dev\" \"cd server && yarn dev\"",
-    "clean": "rm -rf node_modules && rm -rf client/node_modules && rm -rf server/node_modules && rm -rf games/node_modules",
+    "dev:client": "cd client && yarn dev",
+    "dev:server": "cd server && yarn dev",
+    "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
+    "clean:workspace": "rm -rf node_modules",
+    "clean:client": "rm -rf client/node_modules",
+    "clean:server": "rm -rf server/node_modules",
+    "clean:games": "rm -rf games/node_modules",
+    "clean": "yarn clean:workspace && yarn clean:client && yarn clean:server && yarn clean:games",
     "ci": "yarn clean && yarn install"
   },
   "devDependencies": {

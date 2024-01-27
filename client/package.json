@@ -1,6 +1,7 @@
 {
   "author": "Adam Nguyen",
   "name": "mantine-vite-template",
+  "license": "MIT",
   "private": true,
   "version": "1.0.0",
   "scripts": {
