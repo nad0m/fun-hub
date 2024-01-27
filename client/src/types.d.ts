@@ -1,3 +1,4 @@
+import { Game } from 'boardgame.io';
 import type { Client } from 'boardgame.io/react';
 
 export type GameConfig = {
