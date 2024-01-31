@@ -82,5 +82,13 @@ export const TheMindBoard: React.FunctionComponent<
     );
   }
 
+  if (phase === 'winPhase') {
+    return <Button onClick={() => moves.nextLevel()}>Next level</Button>;
+  }
+
+  if (phase === 'losePhase') {
+    return <Button onClick={() => moves.playAgain()}>Play again</Button>;
+  }
+
   return <Box>Welcome to {phase}</Box>;
 };
