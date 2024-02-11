@@ -5,5 +5,5 @@
   "ext": "ts,json",
   "inspect": true,
   "verbose": true,
-  "exec": "ts-node src/server.ts"
+  "exec": "ts-node -r ./preload src/server.ts"
 }
