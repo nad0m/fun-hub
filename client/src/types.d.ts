@@ -1,4 +1,3 @@
-import { Game } from 'boardgame.io';
 import type { Client } from 'boardgame.io/react';
 
 export type GameConfig = {
@@ -14,6 +13,6 @@ export type GameConfig = {
 export type GameClient = ReturnType<typeof Client>;
 
 export type GamePageProps = {
-  gameConfig: Game;
+  gameConfig: GameConfig;
   GameClientComponent: GameClient;
 };
