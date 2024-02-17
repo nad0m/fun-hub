@@ -9,15 +9,15 @@
     "dev:client": "cd client && yarn dev",
     "dev:server": "cd server && yarn dev",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
-    "clean:workspace": "rm -rf node_modules",
-    "clean:client": "rm -rf client/node_modules",
-    "clean:server": "rm -rf server/node_modules",
-    "clean:games": "rm -rf games/node_modules",
-    "clean": "yarn clean:workspace && yarn clean:client && yarn clean:server && yarn clean:games",
-    "ci": "yarn clean && yarn install"
+    "clean:workspace": "echo \"Deleting workspace modules...\" && rm -rf node_modules",
+    "clean:client": "echo \"Deleting client modules...\" && rm -rf client/node_modules",
+    "clean:server": "echo \"Deleting server modules...\" && rm -rf server/node_modules",
+    "clean:games": "echo \"Deleting games modules...\" && rm -rf games/node_modules",
+    "clean": "yarn clean:client && yarn clean:server && yarn clean:games && yarn clean:workspace && echo \"Successfully deleted all stale modules.\"",
+    "ci": "yarn clean && echo \"Installing dependencies...\" && yarn install"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.1.0"
 }
