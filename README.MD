@@ -5,14 +5,17 @@
 #### Install Yarn
 
 ```sh
-npm install --global yarn # run once
+corepack enable
+yarn set version 4.1.0 # current latest version
 ```
+
+[Detailed yarn install docs](https://yarnpkg.com/getting-started/install)
 
 #### Install Project
 
 ```sh
-yarn # first time
-yarn ci # to clean-install
+yarn # first time install only
+yarn ci # to clean-install (for clean installs)
 ```
 
 #### Run Project
