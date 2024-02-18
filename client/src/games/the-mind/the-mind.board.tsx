@@ -1,15 +1,16 @@
-import React from 'react';
-import { BoardProps } from 'boardgame.io/react';
 import { TheMindState } from '@games';
-import { CountDown, GameLobby, LobbyPlayerList } from 'components';
+import {
+  CountDown,
+  GameBoardPropsWrapper,
+  GameLobby,
+  LobbyPlayerList,
+} from 'components';
 import {
   Button,
-  Switch,
   Container,
   Box,
   Text,
   Stack,
-  Title,
   Flex,
   Card,
   Group,
@@ -17,50 +18,34 @@ import {
   SimpleGrid,
   Indicator,
   Grid,
-  Skeleton,
-  Mark,
 } from '@mantine/core';
-import {
-  IconCheck,
-  IconCards,
-  IconCrossFilled,
-  IconX,
-  IconArrowRight,
-} from '@tabler/icons-react';
-import { useLocation } from 'react-router-dom';
-import { GAMES_GLOSSARY } from 'config/games';
+import { IconCards, IconArrowRight } from '@tabler/icons-react';
 import { generateColor } from 'utils/generate-color';
 import styles from './the-mind.module.css';
 import { parseLogEntry } from './utils';
+import { FunHubBoardProps } from 'types';
 
-const GAME_NAME = 'TheMind';
 const GAME_PHASE_READY_UP = 'readyUpPhase';
 
-export const TheMindBoard: React.FunctionComponent<
-  BoardProps<TheMindState>
-> = ({
+const TheMindBoardComponent = ({
   G,
   ctx,
   playerID,
-  credentials,
-  events,
   matchData: players,
   moves,
-  matchID,
   log,
-}) => {
+  gameConfig,
+}: FunHubBoardProps<TheMindState>) => {
   const url = window.location.href;
   const { phase, currentPlayer } = ctx;
 
-  console.log(log);
-
-  if (phase === 'readyUpPhase') {
+  if (phase === GAME_PHASE_READY_UP) {
     const allPlayersReady = Object.values(G.players).every(
       (player) => player.isReady
     );
 
     return (
-      <GameLobby gameMetadata={GAMES_GLOSSARY[GAME_NAME]} copyPasteUrl={url}>
+      <GameLobby gameMetadata={gameConfig} copyPasteUrl={url}>
         <LobbyPlayerList
           matchData={players}
           gameState={G}
@@ -90,7 +75,7 @@ export const TheMindBoard: React.FunctionComponent<
               <SimpleGrid cols={2}>
                 <Text size="xs">Game:</Text>
                 <Text size="xs" style={{ fontWeight: 'bold' }}>
-                  {GAMES_GLOSSARY[GAME_NAME].title}
+                  {gameConfig.title}
                 </Text>
                 <Text size="xs">Level:</Text>
                 <Text size="xs" style={{ fontWeight: 'bold' }}>
@@ -226,3 +211,5 @@ export const TheMindBoard: React.FunctionComponent<
 
   return <Box>Welcome to {phase}</Box>;
 };
+
+export const TheMindBoard = GameBoardPropsWrapper(TheMindBoardComponent);

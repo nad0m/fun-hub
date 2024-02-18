@@ -1,13 +1,12 @@
-import React, { useMemo } from 'react';
-import { BoardProps } from 'boardgame.io/react';
+import { useMemo } from 'react';
 import { TicTacToeState } from '@games';
+import { FunHubBoardProps } from 'types';
+import { GameBoardPropsWrapper } from 'components';
 
 const range = (max: number, min: number = 0): number[] =>
   [...Array(max - min)].map((_, i) => i + min);
 
-export const TicTacToeBoard: React.FunctionComponent<
-  BoardProps<TicTacToeState>
-> = (props) => {
+const TicTacToeBoardComponent = (props: FunHubBoardProps<TicTacToeState>) => {
   const winner = useMemo(() => {
     if (props.ctx.gameover) {
       return props.ctx.gameover.winner !== undefined ? (
@@ -50,3 +49,5 @@ export const TicTacToeBoard: React.FunctionComponent<
     </div>
   );
 };
+
+export const TicTacToeBoard = GameBoardPropsWrapper(TicTacToeBoardComponent);

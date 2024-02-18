@@ -7,7 +7,7 @@ import { LobbyAPI } from 'boardgame.io';
 import { PlayerRegister } from 'components/player-register';
 import { joinMatch } from 'services/lobby-service';
 import { isNonEmptyString, validatePlayerData } from 'utils/validators';
-import { GameClient, GamePageProps } from 'types';
+import { ClientComponent, GameConfig, GamePageProps } from 'types';
 import { useIsMountedEffect } from 'hooks';
 
 const useGetMatchPlayerData = ({
@@ -65,19 +65,19 @@ const useGetMatchPlayerData = ({
 };
 
 const PlayerCredentialsProvider = ({
+  gameConfig,
   playerName,
-  gameID,
   matchID,
   GameClientComponent,
 }: {
+  gameConfig: GameConfig;
   playerName: string;
-  gameID: string;
   matchID: string;
-  GameClientComponent: GameClient;
+  GameClientComponent: ClientComponent;
 }) => {
   const { playerData, isLoading, hasError } = useGetMatchPlayerData({
+    gameID: gameConfig.id,
     playerName,
-    gameID,
     matchID,
   });
 
@@ -93,6 +93,10 @@ const PlayerCredentialsProvider = ({
 
   return (
     <GameClientComponent
+      // TODO: extend GameClient type props
+      // @ts-ignore - it was impossible to add this to the props type...
+      // It sucks that we cant enforce this, but theres no realistic way to overwrite the type
+      gameConfig={gameConfig}
       playerID={playerID}
       credentials={playerCredentials}
       matchID={matchID}
@@ -127,7 +131,7 @@ export const GamePage: FC<GamePageProps> = ({
   return (
     <Box>
       <PlayerCredentialsProvider
-        gameID={gameConfig.id}
+        gameConfig={gameConfig}
         playerName={playerName}
         matchID={matchID!} // we know matchID is nonempty
         GameClientComponent={GameClientComponent}
