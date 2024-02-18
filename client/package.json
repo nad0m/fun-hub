@@ -51,7 +51,6 @@
     "@typescript-eslint/parser": "^6.9.1",
     "@vitejs/plugin-react": "^4.2.1",
     "chalk": "4.1.2",
-    "eslint": "^8.53.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-mantine": "3.0.0",
@@ -71,7 +70,6 @@
     "storybook-dark-mode": "^3.0.3",
     "stylelint": "^16.0.2",
     "stylelint-config-standard-scss": "^12.0.0",
-    "typescript": "^5.3.3",
     "vite": "^5.0.10",
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^1.1.0"

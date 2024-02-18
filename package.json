@@ -17,7 +17,9 @@
     "ci": "yarn clean && echo \"Installing dependencies...\" && yarn install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
   },
   "packageManager": "yarn@4.1.0"
 }

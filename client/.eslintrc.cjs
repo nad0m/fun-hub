@@ -1,11 +1,12 @@
 module.exports = {
   extends: ['mantine'],
   parserOptions: {
-    project: './tsconfig.json',
+    project: './client/tsconfig.json',
   },
-  workingDirectories: [{ mode: 'auto' }],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'consistent-return': 'off',
   },
+  // ignore base level files
+  ignorePatterns: ['*.*'],
 };
