@@ -1,5 +1,4 @@
 export type MultiplayerGamePlayer = {
-  name: string
   isReady: boolean
 }
 
@@ -21,3 +20,5 @@ export enum CommonGamePhases {
   WinPhase = 'WIN_PHASE',
   LosePhase = 'LOSE_PHASE',
 }
+
+export const GAME_START_COUNTDOWN_SECONDS = 3

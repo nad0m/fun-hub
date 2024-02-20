@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Loader } from '@mantine/core';
+import { Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalStorage } from 'usehooks-ts';
 import { LobbyAPI } from 'boardgame.io';
@@ -9,6 +9,7 @@ import { joinMatch } from 'services/lobby-service';
 import { isNonEmptyString, validatePlayerData } from 'utils/validators';
 import { ClientComponent, GameConfig, GamePageProps } from 'types';
 import { useIsMountedEffect } from 'hooks';
+import { GameContentWrapper } from 'components/game-content-wrapper';
 
 const useGetMatchPlayerData = ({
   playerName,
@@ -64,7 +65,7 @@ const useGetMatchPlayerData = ({
   };
 };
 
-const PlayerCredentialsProvider = ({
+const GameWithMatchDataWrapper = ({
   gameConfig,
   playerName,
   matchID,
@@ -114,28 +115,28 @@ export const GamePage: FC<GamePageProps> = ({
   // incase something went wrong routing
   if (!isNonEmptyString(matchID)) {
     return (
-      <Box>
+      <GameContentWrapper>
         <p>Invalid matchID found.</p>;
-      </Box>
+      </GameContentWrapper>
     );
   }
   // incase player has not registered yet (playerName)
   if (!isNonEmptyString(playerName)) {
     return (
-      <Box>
+      <GameContentWrapper>
         <PlayerRegister gameTitle={gameConfig.title} />
-      </Box>
+      </GameContentWrapper>
     );
   }
-
+  // game with match data wrapper
   return (
-    <Box>
-      <PlayerCredentialsProvider
+    <GameContentWrapper>
+      <GameWithMatchDataWrapper
         gameConfig={gameConfig}
         playerName={playerName}
         matchID={matchID!} // we know matchID is nonempty
         GameClientComponent={GameClientComponent}
       />
-    </Box>
+    </GameContentWrapper>
   );
 };

@@ -33,10 +33,6 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
   moves,
 }) => {
   return (
-    // State
-
-    // Effects
-
     <Stack>
       {matchData?.map((player) => {
         const playerColor = generateColor(player.id) || 'gray';

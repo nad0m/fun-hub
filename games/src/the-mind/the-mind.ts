@@ -2,6 +2,7 @@ import { Ctx, Game, PhaseMap } from 'boardgame.io'
 import { ActivePlayers } from 'boardgame.io/core'
 import {
   CommonGamePhases,
+  GAME_START_COUNTDOWN_SECONDS,
   MultiplayerGamePlayer,
   MultiplayerGameWithLobbyState,
 } from '../types'
@@ -21,8 +22,6 @@ export type TheMindState = MultiplayerGameWithLobbyState<TheMindPlayer> & {
 }
 
 export type TheMindPhases = typeof phases
-
-const GAME_START_COUNTDOWN_SECONDS = 3
 
 const phases: PhaseMap<TheMindState, Ctx> = {
   [CommonGamePhases.ReadyUpPhase]: {
@@ -118,7 +117,6 @@ const phases: PhaseMap<TheMindState, Ctx> = {
         const players: { [key: string]: TheMindPlayer } = {}
         playOrder.forEach(playerId => {
           players[playerId] = {
-            name: '',
             hand: [],
             isReady: false,
           }
@@ -147,7 +145,6 @@ const phases: PhaseMap<TheMindState, Ctx> = {
         const players: { [key: string]: TheMindPlayer } = {}
         playOrder.forEach(playerId => {
           players[playerId] = {
-            name: '',
             hand: [],
             isReady: false,
           }
@@ -178,7 +175,6 @@ export const TheMind: Game<TheMindState> = {
     const players: { [key: string]: TheMindPlayer } = {}
     playOrder.forEach(playerId => {
       players[playerId] = {
-        name: '',
         hand: [],
         isReady: false,
       }
