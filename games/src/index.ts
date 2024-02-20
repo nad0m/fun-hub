@@ -4,5 +4,6 @@
 // (export { TheMind, TheMindPlayer, TheMindState } from './the-mind')
 // please use generic export *
 
+export * from './types'
 export * from './the-mind'
 export * from './tic-tac-toe'

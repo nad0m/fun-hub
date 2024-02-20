@@ -1,10 +1,5 @@
-import { TheMindState } from '@games';
-import {
-  CountDown,
-  GameBoardPropsWrapper,
-  GameLobby,
-  LobbyPlayerList,
-} from 'components';
+import { CommonGamePhases, TheMindState } from '@games';
+import { GameBoardPropsWrapper } from 'components';
 import {
   Button,
   Container,
@@ -24,46 +19,20 @@ import { generateColor } from 'utils/generate-color';
 import styles from './the-mind.module.css';
 import { parseLogEntry } from './utils';
 import { FunHubBoardProps } from 'types';
+import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 
-const GAME_PHASE_READY_UP = 'readyUpPhase';
+const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
+  const {
+    G,
+    ctx: { phase },
+    playerID,
+    matchData: players,
+    moves,
+    log,
+    gameConfig,
+  } = props;
 
-const TheMindBoardComponent = ({
-  G,
-  ctx,
-  playerID,
-  matchData: players,
-  moves,
-  log,
-  gameConfig,
-}: FunHubBoardProps<TheMindState>) => {
-  const url = window.location.href;
-  const { phase, currentPlayer } = ctx;
-
-  if (phase === GAME_PHASE_READY_UP) {
-    const allPlayersReady = Object.values(G.players).every(
-      (player) => player.isReady
-    );
-
-    return (
-      <GameLobby gameMetadata={gameConfig} copyPasteUrl={url}>
-        <LobbyPlayerList
-          matchData={players}
-          gameState={G}
-          clientPlayerID={playerID}
-          moves={moves}
-        />
-        {allPlayersReady && (
-          <CountDown
-            moves={moves}
-            time={G.gameStartTimer}
-            isCurrentPlayer={currentPlayer === playerID}
-          />
-        )}
-      </GameLobby>
-    );
-  }
-
-  if (phase === 'playPhase') {
+  if (phase === CommonGamePhases.PlayPhase) {
     return (
       <Container my="md">
         <Grid>
@@ -201,15 +170,21 @@ const TheMindBoardComponent = ({
     );
   }
 
-  if (phase === 'winPhase') {
+  if (phase === CommonGamePhases.WinPhase) {
     return <Button onClick={() => moves.nextLevel()}>Next level</Button>;
   }
 
-  if (phase === 'losePhase') {
+  if (phase === CommonGamePhases.LosePhase) {
     return <Button onClick={() => moves.playAgain()}>Play again</Button>;
   }
 
-  return <Box>Welcome to {phase}</Box>;
+  return <Box>Unexpected phase encountered: {phase}</Box>;
 };
 
-export const TheMindBoard = GameBoardPropsWrapper(TheMindBoardComponent);
+export const TheMindBoard = GameBoardPropsWrapper(
+  (props: FunHubBoardProps<TheMindState>) => (
+    <GameWithLobbyWrapper {...props}>
+      <TheMindBoardComponent {...props} />
+    </GameWithLobbyWrapper>
+  )
+);

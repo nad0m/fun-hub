@@ -64,8 +64,6 @@ export const joinMatch = async ({
   matchID: string;
   playerName: string;
 }): Promise<LobbyAPI.JoinedMatch> => {
-  console.log('join match request');
-  // is this for testing, or needed?
   await new Promise((resolve) => {
     setTimeout(resolve, FORCE_DELAY_MS);
   });
