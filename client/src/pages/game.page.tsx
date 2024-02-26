@@ -1,14 +1,15 @@
 import { type FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Loader } from '@mantine/core';
+import { Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalStorage } from 'usehooks-ts';
 import { LobbyAPI } from 'boardgame.io';
 import { PlayerRegister } from 'components/player-register';
 import { joinMatch } from 'services/lobby-service';
 import { isNonEmptyString, validatePlayerData } from 'utils/validators';
-import { GameClient, GamePageProps } from 'types';
+import { ClientComponent, GameConfig, GamePageProps } from 'types';
 import { useIsMountedEffect } from 'hooks';
+import { GameContentWrapper } from 'components/game-content-wrapper';
 
 const useGetMatchPlayerData = ({
   playerName,
@@ -64,20 +65,20 @@ const useGetMatchPlayerData = ({
   };
 };
 
-const PlayerCredentialsProvider = ({
+const GameWithMatchDataWrapper = ({
+  gameConfig,
   playerName,
-  gameID,
   matchID,
   GameClientComponent,
 }: {
+  gameConfig: GameConfig;
   playerName: string;
-  gameID: string;
   matchID: string;
-  GameClientComponent: GameClient;
+  GameClientComponent: ClientComponent;
 }) => {
   const { playerData, isLoading, hasError } = useGetMatchPlayerData({
+    gameID: gameConfig.id,
     playerName,
-    gameID,
     matchID,
   });
 
@@ -93,6 +94,10 @@ const PlayerCredentialsProvider = ({
 
   return (
     <GameClientComponent
+      // TODO: extend GameClient type props
+      // @ts-ignore - it was impossible to add this to the props type...
+      // It sucks that we cant enforce this, but theres no realistic way to overwrite the type
+      gameConfig={gameConfig}
       playerID={playerID}
       credentials={playerCredentials}
       matchID={matchID}
@@ -110,28 +115,28 @@ export const GamePage: FC<GamePageProps> = ({
   // incase something went wrong routing
   if (!isNonEmptyString(matchID)) {
     return (
-      <Box>
+      <GameContentWrapper>
         <p>Invalid matchID found.</p>;
-      </Box>
+      </GameContentWrapper>
     );
   }
   // incase player has not registered yet (playerName)
   if (!isNonEmptyString(playerName)) {
     return (
-      <Box>
+      <GameContentWrapper>
         <PlayerRegister gameTitle={gameConfig.title} />
-      </Box>
+      </GameContentWrapper>
     );
   }
-
+  // game with match data wrapper
   return (
-    <Box>
-      <PlayerCredentialsProvider
-        gameID={gameConfig.id}
+    <GameContentWrapper>
+      <GameWithMatchDataWrapper
+        gameConfig={gameConfig}
         playerName={playerName}
         matchID={matchID!} // we know matchID is nonempty
         GameClientComponent={GameClientComponent}
       />
-    </Box>
+    </GameContentWrapper>
   );
 };

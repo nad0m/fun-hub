@@ -1,0 +1,7 @@
+.gameBoard {
+  user-select: none;
+}
+
+.boardDisabled {
+  pointer-events: none;
+}

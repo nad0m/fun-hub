@@ -4,4 +4,6 @@ export default {
   title: 'PlayerRegister',
 };
 
-export const Default = () => <PlayerRegister />;
+export const Default = ({ gameTitle }: { gameTitle: string }) => (
+  <PlayerRegister gameTitle={gameTitle} />
+);

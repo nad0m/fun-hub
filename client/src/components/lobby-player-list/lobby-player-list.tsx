@@ -1,12 +1,7 @@
 import {
   Avatar,
   Button,
-  CheckIcon,
-  ColorSwatch,
-  Container,
   Flex,
-  Group,
-  List,
   Loader,
   Stack,
   Text,
@@ -14,22 +9,18 @@ import {
   rem,
 } from '@mantine/core';
 import {
-  IconPointer,
   IconCheck,
   IconCircleCheck,
-  IconCircleDashed,
   IconCircleX,
-  IconClick,
-  IconHandClick,
   IconCircleDotted,
 } from '@tabler/icons-react';
-import { TheMindState } from '@games';
+import { MultiplayerGameWithLobbyState } from '@games';
 import { FilteredMetadata } from 'boardgame.io';
 import { FC } from 'react';
 import { generateColor } from 'utils/generate-color';
 
 type LobbyPlayerListProps = {
-  gameState: TheMindState;
+  gameState: MultiplayerGameWithLobbyState;
   matchData?: FilteredMetadata;
   clientPlayerID: string | null;
   moves: Record<string, (...args: any[]) => void>;
@@ -42,10 +33,6 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
   moves,
 }) => {
   return (
-    // State
-
-    // Effects
-
     <Stack>
       {matchData?.map((player) => {
         const playerColor = generateColor(player.id) || 'gray';

@@ -1,5 +1,4 @@
-import { Game } from 'boardgame.io';
-import type { Client } from 'boardgame.io/react';
+import { BoardProps, Client } from 'boardgame.io/react';
 
 export type GameConfig = {
   id: string;
@@ -11,9 +10,14 @@ export type GameConfig = {
   maxPlayers: number;
 };
 
-export type GameClient = ReturnType<typeof Client>;
+export type FunHubBoardProps<GameState> = BoardProps<GameState> & {
+  gameConfig: GameConfig;
+};
+
+// Client returns a Client React component
+export type ClientComponent = ReturnType<typeof Client>;
 
 export type GamePageProps = {
-  gameConfig: Game;
-  GameClientComponent: GameClient;
+  gameConfig: GameConfig;
+  GameClientComponent: ClientComponent;
 };

@@ -1,26 +1,52 @@
-import React, { useMemo } from 'react';
-import { BoardProps } from 'boardgame.io/react';
-import { TicTacToeState } from '@games';
+import { CommonGamePhases, TicTacToeState } from '@games';
+import { FunHubBoardProps } from 'types';
+import { GameBoardPropsWrapper } from 'components';
+import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
+import styles from './tic-tac-toe.module.css';
 
 const range = (max: number, min: number = 0): number[] =>
   [...Array(max - min)].map((_, i) => i + min);
 
-export const TicTacToeBoard: React.FunctionComponent<
-  BoardProps<TicTacToeState>
-> = (props) => {
-  const winner = useMemo(() => {
-    if (props.ctx.gameover) {
-      return props.ctx.gameover.winner !== undefined ? (
-        <div id="winner">Winner: {props.ctx.gameover.winner}</div>
-      ) : (
-        <div id="winner">Draw!</div>
-      );
-    }
-  }, [props.ctx.gameover]);
+const getPlayerChar = (id: string | null) => {
+  if (!id) return '';
+  return id === '1' ? 'X' : 'O';
+};
+
+const TicTacToeBoardComponent = (props: FunHubBoardProps<TicTacToeState>) => {
+  const {
+    G,
+    ctx: { phase, currentPlayer },
+    moves,
+    playerID,
+  } = props;
+
+  const playerHasWon = phase === CommonGamePhases.WinPhase;
+  const isDraw = phase === CommonGamePhases.DrawPhase;
+  const isEndGame = playerHasWon || isDraw;
+
+  const turnPlayerLabel =
+    currentPlayer === playerID ? 'Your' : `${getPlayerChar(currentPlayer)}'s`;
 
   return (
     <div>
-      <table id="board">
+      {!isEndGame && <div>{turnPlayerLabel} turn</div>}
+      {isEndGame && (
+        <div>
+          Game Result:{' '}
+          <label>
+            {playerHasWon
+              ? `${getPlayerChar(G.winner)} is the winner!`
+              : 'Draw'}
+          </label>
+          <button
+            style={{ display: 'block' }}
+            onClick={() => moves.resetGame()}
+          >
+            Reset Game
+          </button>{' '}
+        </div>
+      )}
+      <table id="board" className={styles.gameBoard + styles.boardDisabled}>
         <tbody>
           {range(3).map((i) => (
             <tr key={i}>
@@ -38,7 +64,7 @@ export const TicTacToeBoard: React.FunctionComponent<
                     }}
                     onClick={() => props.moves.clickCell(id)}
                   >
-                    {props.G.cells[id]}
+                    {getPlayerChar(props.G.cells[id])}
                   </td>
                 );
               })}
@@ -46,7 +72,14 @@ export const TicTacToeBoard: React.FunctionComponent<
           ))}
         </tbody>
       </table>
-      {winner}
     </div>
   );
 };
+
+export const TicTacToeBoard = GameBoardPropsWrapper(
+  (props: FunHubBoardProps<TicTacToeState>) => (
+    <GameWithLobbyWrapper {...props}>
+      <TicTacToeBoardComponent {...props} />
+    </GameWithLobbyWrapper>
+  )
+);

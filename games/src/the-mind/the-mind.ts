@@ -1,30 +1,30 @@
 import { Ctx, Game, PhaseMap } from 'boardgame.io'
 import { ActivePlayers } from 'boardgame.io/core'
+import {
+  CommonGamePhases,
+  GAME_START_COUNTDOWN_SECONDS,
+  MultiplayerGamePlayer,
+  MultiplayerGameWithLobbyState,
+} from '../types'
 
 export type GameStatus = 'pending' | 'win' | 'lose'
 
-export type TheMindPlayer = {
-  name: string | null
+export type TheMindPlayer = MultiplayerGamePlayer & {
   hand: number[]
-  isReady: boolean
 }
 
-export type TheMindState = {
+export type TheMindState = MultiplayerGameWithLobbyState<TheMindPlayer> & {
   currentLevel: number
   gameStatus: GameStatus
   deck: number[]
   gameAnswer: number[]
   discard: number[]
-  gameStartTimer: number
-  players: { [key: string]: TheMindPlayer }
 }
 
 export type TheMindPhases = typeof phases
 
-const GAME_START_COUNTDOWN_SECONDS = 3
-
 const phases: PhaseMap<TheMindState, Ctx> = {
-  readyUpPhase: {
+  [CommonGamePhases.ReadyUpPhase]: {
     onBegin: G => {
       G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
     },
@@ -44,9 +44,9 @@ const phases: PhaseMap<TheMindState, Ctx> = {
       return G.gameStartTimer === 0
     },
     start: true,
-    next: 'drawPhase',
+    next: CommonGamePhases.DrawPhase,
   },
-  drawPhase: {
+  [CommonGamePhases.DrawPhase]: {
     onBegin: G => {
       Object.entries(G.players).forEach(([playerId]) => {
         let numberOfCards = G.currentLevel
@@ -70,9 +70,9 @@ const phases: PhaseMap<TheMindState, Ctx> = {
         players.every(({ hand }) => hand.length === G.currentLevel)
       )
     },
-    next: 'playPhase',
+    next: CommonGamePhases.PlayPhase,
   },
-  playPhase: {
+  [CommonGamePhases.PlayPhase]: {
     moves: {
       playCard: (G, ctx, cardValue: number) => {
         const playerID = ctx.playerID as string
@@ -102,22 +102,21 @@ const phases: PhaseMap<TheMindState, Ctx> = {
     },
     next: G => {
       if (G.gameStatus === 'win') {
-        return 'winPhase'
+        return CommonGamePhases.WinPhase
       }
 
       if (G.gameStatus === 'lose') {
-        return 'losePhase'
+        return CommonGamePhases.LosePhase
       }
     },
   },
-  winPhase: {
+  [CommonGamePhases.WinPhase]: {
     moves: {
       nextLevel: (G, { playOrder, random }) => {
         console.log(G)
         const players: { [key: string]: TheMindPlayer } = {}
         playOrder.forEach(playerId => {
           players[playerId] = {
-            name: null,
             hand: [],
             isReady: false,
           }
@@ -138,15 +137,14 @@ const phases: PhaseMap<TheMindState, Ctx> = {
     endIf: G => {
       return G.gameStatus === 'pending'
     },
-    next: 'drawPhase',
+    next: CommonGamePhases.DrawPhase,
   },
-  losePhase: {
+  [CommonGamePhases.LosePhase]: {
     moves: {
       playAgain: (G, { playOrder, random }) => {
         const players: { [key: string]: TheMindPlayer } = {}
         playOrder.forEach(playerId => {
           players[playerId] = {
-            name: null,
             hand: [],
             isReady: false,
           }
@@ -167,7 +165,7 @@ const phases: PhaseMap<TheMindState, Ctx> = {
     endIf: G => {
       return G.gameStatus === 'pending'
     },
-    next: 'drawPhase',
+    next: CommonGamePhases.DrawPhase,
   },
 }
 
@@ -177,7 +175,6 @@ export const TheMind: Game<TheMindState> = {
     const players: { [key: string]: TheMindPlayer } = {}
     playOrder.forEach(playerId => {
       players[playerId] = {
-        name: null,
         hand: [],
         isReady: false,
       }
