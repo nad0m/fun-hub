@@ -34,7 +34,48 @@ const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
 
   if (phase === CommonGamePhases.PlayPhase) {
     return (
-      <Container my="md">
+      <Container my="md" display="flex">
+        <Card className={styles.card} h="50vh" withBorder>
+          <Text className={styles.title} mb="md">
+            Players
+          </Text>
+          <Stack>
+            {players?.map((player) => {
+              const playerColor = generateColor(player.id) || 'gray';
+              return (
+                <Card
+                  p={12}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                  }}
+                  withBorder
+                >
+                  <Flex gap={6} align="center">
+                    <Avatar color={playerColor} radius="xl" size={22}>
+                      {player.name?.slice(0, 2).toUpperCase() || 'N/A'}
+                    </Avatar>
+                    <Text size="xs" style={{ fontWeight: 'bold' }}>
+                      {player.name}
+                    </Text>
+                  </Flex>
+                  <Indicator
+                    inline
+                    size={12}
+                    label={
+                      <Text size="8px">{G.players[player.id].hand.length}</Text>
+                    }
+                  >
+                    <Flex gap={1} align="center">
+                      <IconCards size={22} />
+                    </Flex>
+                  </Indicator>
+                </Card>
+              );
+            })}
+          </Stack>
+        </Card>
         <Grid>
           <Grid.Col span={{ base: 12, xs: 3 }}>
             <Card className={styles.card} mih={120} withBorder>
@@ -57,7 +98,54 @@ const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
               </SimpleGrid>
             </Card>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, xs: 3 }} mah={180}>
+
+          <Grid.Col span={{ base: 12, xs: 9 }}>
+            <Card className={styles.card} mih={120} withBorder>
+              <Text className={styles.title} mb="md">
+                Players
+              </Text>
+              <SimpleGrid cols={2}>
+                {players?.map((player) => {
+                  const playerColor = generateColor(player.id) || 'gray';
+                  return (
+                    <Card
+                      p={12}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                      }}
+                      withBorder
+                    >
+                      <Flex gap={6} align="center">
+                        <Avatar color={playerColor} radius="xl" size={22}>
+                          {player.name?.slice(0, 2).toUpperCase() || 'N/A'}
+                        </Avatar>
+                        <Text size="xs" style={{ fontWeight: 'bold' }}>
+                          {player.name}
+                        </Text>
+                      </Flex>
+                      <Indicator
+                        inline
+                        size={12}
+                        label={
+                          <Text size="8px">
+                            {G.players[player.id].hand.length}
+                          </Text>
+                        }
+                      >
+                        <Flex gap={1} align="center">
+                          <IconCards size={22} />
+                        </Flex>
+                      </Indicator>
+                    </Card>
+                  );
+                })}
+              </SimpleGrid>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, xs: 12 }} mah={130}>
             <Card className={styles.card} withBorder>
               <Text className={styles.title} mb="md">
                 Log
@@ -80,6 +168,7 @@ const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
                             size="xs"
                             display="flex"
                             style={{ alignItems: 'center', gap: 4 }}
+                            fs="italic"
                           >
                             <IconArrowRight size={18} color="teal" />
                             {parsedLog}
@@ -93,44 +182,6 @@ const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
                   })}
                 </Stack>
               </Card>
-            </Card>
-          </Grid.Col>
-
-          <Grid.Col span={{ base: 12, xs: 6 }}>
-            <Card className={styles.card} mih={120} withBorder>
-              <Text className={styles.title} mb="md">
-                Players
-              </Text>
-              <SimpleGrid cols={3}>
-                {players?.map((player) => {
-                  const playerColor = generateColor(player.id) || 'gray';
-                  return (
-                    <Flex gap={12} align="center">
-                      <Flex gap={6} align="center">
-                        <Avatar color={playerColor} radius="xl" size={22}>
-                          {player.name?.slice(0, 2).toUpperCase() || 'N/A'}
-                        </Avatar>
-                        <Text size="xs" style={{ fontWeight: 'bold' }}>
-                          {player.name}
-                        </Text>
-                      </Flex>
-                      <Indicator
-                        inline
-                        size={12}
-                        label={
-                          <Text size="8px">
-                            {G.players[player.id].hand.length}
-                          </Text>
-                        }
-                      >
-                        <Flex gap={1} align="center">
-                          <IconCards size={22} />
-                        </Flex>
-                      </Indicator>
-                    </Flex>
-                  );
-                })}
-              </SimpleGrid>
             </Card>
           </Grid.Col>
 

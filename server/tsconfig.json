@@ -10,9 +10,6 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {
-      "@games": ["../games/src/index"],
-    },
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"], // makes sure our paths are run with ts-node

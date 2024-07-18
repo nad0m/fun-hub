@@ -4,7 +4,12 @@ const path = require('path');
 
 module.exports = {
   target: 'node',
-  entry: './dist/server.js',
+  entry: './dist/server/src/server.js',
+  resolve: {
+    alias: {
+      "@games": path.resolve(__dirname, '../games/src'),
+    },
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
