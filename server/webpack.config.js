@@ -7,7 +7,7 @@ module.exports = {
   entry: './dist/server/src/server.js',
   resolve: {
     alias: {
-      "@games": path.resolve(__dirname, '../games/src'),
+      '@games': path.resolve(__dirname, '../games/src'),
     },
   },
   output: {

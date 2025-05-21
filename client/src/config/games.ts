@@ -22,4 +22,15 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     minPlayers: 2,
     maxPlayers: 10,
   },
+  LoveLetters: {
+    id: 'LoveLetters',
+    title: 'Love Letters',
+    description:
+      'Meld minds with your fellow players to play cards in order without talking.',
+    path: '/loveletters',
+    thumbnail:
+      'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/themind.jpeg',
+    minPlayers: 2,
+    maxPlayers: 4,
+  },
 };

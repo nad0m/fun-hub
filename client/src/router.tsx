@@ -3,6 +3,7 @@ import { TicTacToeClient, TheMindClient } from 'games';
 import { GamePage } from 'pages/game.page';
 import { HomePage } from 'pages/home.page';
 import { GAMES_GLOSSARY } from 'config/games';
+import { LoveLettersClient } from 'games/love-letters';
 
 export function Router() {
   return (
@@ -27,6 +28,15 @@ export function Router() {
           <GamePage
             gameConfig={GAMES_GLOSSARY.TheMind}
             GameClientComponent={TheMindClient}
+          />
+        }
+      />
+      <Route
+        path={`${GAMES_GLOSSARY.LoveLetters.path}/:matchID`}
+        element={
+          <GamePage
+            gameConfig={GAMES_GLOSSARY.LoveLetters}
+            GameClientComponent={LoveLettersClient}
           />
         }
       />
