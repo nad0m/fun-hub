@@ -19,7 +19,9 @@ import {
   invokeBaronEffect,
   invokeGuardEffect,
   invokeHandmaidEffect,
+  invokeKingEffect,
   invokePriestEffect,
+  invokePrinceEffect,
 } from './card-effects'
 
 const phases: PhaseMap<LoveLetterState, Ctx> = {
@@ -48,16 +50,25 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
               if (currentPlayer !== playerID) {
                 return
               }
+              const player = getPlayer(G, currentPlayer)
 
-              const playerName = getPlayerName(G, currentPlayer)
+              // check for countess
+              if (
+                (cardName === 'Prince' || cardName === 'King') &&
+                player.hand.some(({ name }) => name === 'Countess')
+              ) {
+                return
+              }
+
               playCard(G, currentPlayer, cardName)
 
+              // check for valid targets
               if (cardName === 'Guard' || cardName === 'Priest' || cardName === 'Baron') {
                 const hasTargets = checkTargets(G, currentPlayer)
 
                 broadcastMessage(
                   G,
-                  `${playerName} discards ${cardName}; all targets are protected.`,
+                  `${player.name} discards ${cardName}; all targets are protected.`,
                 )
 
                 if (!hasTargets) {
@@ -70,7 +81,33 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 }
               }
 
-              broadcastMessage(G, `${playerName} plays ${cardName}...`)
+              // check if princess is played
+              if (cardName === 'Princess') {
+                player.isActive = false
+                broadcastMessage(
+                  G,
+                  `${player.name} plays ${cardName}. ${player.name} is eliminated.`,
+                )
+                events?.setActivePlayers({
+                  currentPlayer: {
+                    stage: 'EndTurn',
+                  },
+                })
+                return
+              }
+
+              broadcastMessage(G, `${player.name} plays ${cardName}...`)
+
+              // do nothing if countess is played
+              if (cardName === 'Countess') {
+                events?.setActivePlayers({
+                  currentPlayer: {
+                    stage: 'EndTurn',
+                  },
+                })
+                return
+              }
+
               events?.setActivePlayers({
                 currentPlayer: {
                   stage: cardName,
@@ -193,11 +230,50 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
           next: 'EndTurn',
         },
         Prince: {
-          moves: {},
+          moves: {
+            targetPlayer: (G, { events }, targetId: string) => {
+              const { isProtected } = getPlayer(G, targetId)
+
+              if (isProtected) {
+                return
+              }
+
+              const message = invokePrinceEffect(G, targetId)
+
+              broadcastMessage(G, message)
+              events?.endStage()
+            },
+          },
+          next: 'EndTurn',
         },
-        King: {},
-        Countess: {},
-        Princess: {},
+        King: {
+          moves: {
+            targetPlayer: (G, { events, currentPlayer }, targetId: string) => {
+              const { isProtected } = getPlayer(G, targetId)
+
+              if (isProtected) {
+                return
+              }
+
+              const message = invokeKingEffect(G, currentPlayer, targetId)
+
+              broadcastMessage(G, message)
+              events?.endStage()
+            },
+          },
+          next: 'EndTurn',
+        },
+        Princess: {
+          moves: {
+            proceed: (G, { events, currentPlayer }) => {
+              const player = getPlayer(G, currentPlayer)
+              player.isActive = false
+              broadcastMessage(G, `${player.name} is eliminated.`)
+              events?.endStage()
+            },
+          },
+          next: 'EndTurn',
+        },
         EndTurn: {
           moves: {
             endTurn: (_G, { events }) => {

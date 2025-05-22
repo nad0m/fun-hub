@@ -1,4 +1,4 @@
-import { CardName, getPlayer, LoveLetterState, playCard } from './utils'
+import { Card, CardName, drawCard, getPlayer, LoveLetterState, playCard } from './utils'
 
 export const invokeGuardEffect = (
   G: LoveLetterState,
@@ -84,4 +84,36 @@ export const invokeBaronEffect = (
 export const invokeHandmaidEffect = (G: LoveLetterState, currentPlayer: string) => {
   const player = getPlayer(G, currentPlayer)
   player.isProtected = true
+}
+
+export const invokePrinceEffect = (G: LoveLetterState, targetId: string) => {
+  const target = getPlayer(G, targetId)
+  const card = target.hand.pop() as Card
+  target.discard.push(card)
+
+  if (card?.name === 'Princess') {
+    target.isActive = false
+    return `${target.name} has Princess! ${target.name} is eliminated.`
+  }
+
+  drawCard(G, targetId)
+
+  return `${target.name} discards their hand and draws new card.`
+}
+
+export const invokeKingEffect = (
+  G: LoveLetterState,
+  currentPlayer: string,
+  targetId: string,
+) => {
+  const player = getPlayer(G, currentPlayer)
+  const target = getPlayer(G, targetId)
+
+  const playerCard = player.hand.pop() as Card
+  const targetCard = target.hand.pop() as Card
+
+  player.hand.push(targetCard)
+  target.hand.push(playerCard)
+
+  return `${player.name} & ${target.name} traded hands.`
 }

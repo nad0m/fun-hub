@@ -47,6 +47,15 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
           <Button onClick={() => moves.stageCard('Handmaid')}>
             Handmaid card
           </Button>
+          <Button onClick={() => moves.stageCard('Prince')}>Prince card</Button>
+          <Button onClick={() => moves.stageCard('King')}>King card</Button>
+          <Button onClick={() => moves.stageCard('Countess')}>
+            Countess card
+          </Button>
+          <Button onClick={() => moves.stageCard('Princess')}>
+            Princess card
+          </Button>
+
           <Button onClick={() => moves.targetPlayer('0')}>Target 0</Button>
           <Button onClick={() => moves.targetPlayer('1')}>Target 1</Button>
           <Button onClick={() => moves.proceed('0')}>Proceed 0</Button>
