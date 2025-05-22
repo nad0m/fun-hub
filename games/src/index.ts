@@ -7,4 +7,4 @@
 export * from './types'
 export * from './the-mind'
 export * from './tic-tac-toe'
-export * from './love-letters'
+export * from './love-letter'

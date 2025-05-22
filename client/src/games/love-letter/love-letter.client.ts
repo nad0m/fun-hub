@@ -1,12 +1,12 @@
-import { LoveLetters } from '@games';
+import { LoveLetter } from '@games';
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { SERVER_URL } from 'config/constants';
-import { LoveLettersBoard } from './love-letters.board';
+import { LoveLetterBoard } from './love-letter.board';
 
-export const LoveLettersClient = Client({
-  game: LoveLetters,
-  board: LoveLettersBoard,
+export const LoveLetterClient = Client({
+  game: LoveLetter,
+  board: LoveLetterBoard,
   multiplayer: SocketIO({ server: SERVER_URL }),
   debug: true,
 });

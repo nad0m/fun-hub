@@ -1,11 +1,11 @@
 // server.ts
 
-import { TicTacToe, TheMind, LoveLetters } from '../../games/src';
+import { TicTacToe, TheMind, LoveLetter } from '../../games/src';
 import { Origins, Server } from 'boardgame.io/server';
 import { bodyParser } from '@koa/bodyparser';
 
 const server = Server({
-  games: [TicTacToe, TheMind, LoveLetters],
+  games: [TicTacToe, TheMind, LoveLetter],
   origins: [
     // Allow localhost to connect, except when NODE_ENV is 'production'.
     Origins.LOCALHOST_IN_DEVELOPMENT,
