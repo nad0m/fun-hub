@@ -71,7 +71,7 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           </Box>
           <Flex align="flex-end" gap={12}>
             <Select
-              flex={6}
+              flex={4}
               label="Number of players"
               allowDeselect={false}
               data={selectData}
@@ -115,7 +115,7 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           <TextInput
             label="Join with room code"
             placeholder="Paste room code or link here"
-            flex={6}
+            flex={4}
             {...form.getInputProps('roomCode')}
           />
           <Button

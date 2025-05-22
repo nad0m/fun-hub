@@ -115,3 +115,7 @@ export function findAndRemove(hand: Card[], cardName: string): Card | undefined 
   }
   return undefined
 }
+
+export const targetIsProtected = (G: LoveLetterState, targetId: string) => {
+  return getPlayer(G, targetId).isProtected
+}

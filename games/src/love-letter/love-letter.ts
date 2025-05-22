@@ -13,6 +13,7 @@ import {
   LoveLetterPlayer,
   LoveLetterState,
   playCard,
+  targetIsProtected,
 } from './utils'
 import {
   compareHands,
@@ -119,12 +120,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         Guard: {
           moves: {
             targetPlayer: (G, { events, currentPlayer }, targetId: string) => {
-              const playerName = getPlayerName(G, currentPlayer)
-              const { name: targetName, isProtected } = getPlayer(G, targetId)
-
-              if (isProtected) {
+              if (targetIsProtected(G, targetId)) {
                 return
               }
+
+              const playerName = getPlayerName(G, currentPlayer)
+              const targetName = getPlayerName(G, targetId)
 
               broadcastMessage(G, `${playerName} targets ${targetName}. Guessing card...`)
 
@@ -140,6 +141,10 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
               { currentPlayer, events },
               payload: { targetId: string; guess: CardName },
             ) => {
+              if (targetIsProtected(G, payload.targetId)) {
+                return
+              }
+
               const playerName = getPlayerName(G, currentPlayer)
               const { targetId, guess } = payload
 
@@ -158,12 +163,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         Priest: {
           moves: {
             targetPlayer: (G, { events, currentPlayer }, targetId) => {
-              const playerName = getPlayerName(G, currentPlayer)
-              const { name: targetName, isProtected } = getPlayer(G, targetId)
-
-              if (isProtected) {
+              if (targetIsProtected(G, targetId)) {
                 return
               }
+
+              const playerName = getPlayerName(G, currentPlayer)
+              const targetName = getPlayerName(G, targetId)
 
               broadcastMessage(G, `${playerName} targets ${targetName}. Viewing card...`)
 
@@ -190,14 +195,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         Baron: {
           moves: {
             targetPlayer: (G, { events, currentPlayer }, targetId: string) => {
-              const playerName = getPlayerName(G, currentPlayer)
-              const targetName = getPlayerName(G, targetId)
-
-              const { isProtected } = getPlayer(G, targetId)
-
-              if (isProtected) {
+              if (targetIsProtected(G, targetId)) {
                 return
               }
+
+              const playerName = getPlayerName(G, currentPlayer)
+              const targetName = getPlayerName(G, targetId)
 
               broadcastMessage(G, `${playerName} targets ${targetName}. Comparing hands...`)
 
@@ -211,6 +214,10 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         BaronEffect: {
           moves: {
             proceed: (G, { events, currentPlayer }, targetId: string) => {
+              if (targetIsProtected(G, targetId)) {
+                return
+              }
+
               const message = invokeBaronEffect(G, currentPlayer, targetId)
               broadcastMessage(G, message)
               events?.endStage()
@@ -232,9 +239,7 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         Prince: {
           moves: {
             targetPlayer: (G, { events }, targetId: string) => {
-              const { isProtected } = getPlayer(G, targetId)
-
-              if (isProtected) {
+              if (targetIsProtected(G, targetId)) {
                 return
               }
 
@@ -249,9 +254,7 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         King: {
           moves: {
             targetPlayer: (G, { events, currentPlayer }, targetId: string) => {
-              const { isProtected } = getPlayer(G, targetId)
-
-              if (isProtected) {
+              if (targetIsProtected(G, targetId)) {
                 return
               }
 

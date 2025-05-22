@@ -23,7 +23,7 @@ export default function App() {
               style={{
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '0 48px',
+                padding: '0 24px',
               }}
             >
               <AppTitle />

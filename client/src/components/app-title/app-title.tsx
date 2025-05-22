@@ -1,13 +1,14 @@
 import { Title, Text, Image } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import classes from './app-title.module.css';
+import logo from '../../assets/app/logo-v2.png';
 
 export function AppTitle() {
   return (
     <Link to="/" style={{ textDecoration: 'none' }}>
       <Title className={classes.title}>
         <Image
-          src="https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/logo.jpeg"
+          src={logo}
           style={{ borderRadius: '50%' }}
           alt="Fun hub logo"
           w={30}

@@ -1,16 +1,25 @@
-import { Box, Button, Divider, SimpleGrid, Text } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Divider,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { LoveLetterState } from '@games';
 import { GameBoardPropsWrapper } from 'components';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
+import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
 
 export const LoveLetterBoard = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
     const {
       G,
-      ctx: { phase },
+      ctx: { currentPlayer },
       playerID,
-      matchData: players,
+      matchData,
       moves,
       log,
       gameConfig,
@@ -18,11 +27,23 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
 
     const priestData = G.players[playerID as string]?.priestData;
     const baronData = G.players[playerID as string]?.baronData;
+    const players = Object.values(G.players);
 
     console.log(props);
 
+    console.log({ currentPlayer });
+
     return (
       <Box>
+        <Stack gap="xs">
+          {players.map((player, idx) => (
+            <LoveLetterPlayerCard
+              key={idx}
+              player={player}
+              hasBorder={currentPlayer === player.id}
+            />
+          ))}
+        </Stack>
         <Text>{G.message}</Text>
         {priestData && (
           <Text>
@@ -68,8 +89,8 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
           <Button onClick={() => moves.endTurn()}>End turn</Button>
         </SimpleGrid>
 
-        {Object.values(G.players).map((val) => (
-          <Box>
+        {Object.values(G.players).map((val, idx) => (
+          <Box key={idx}>
             <Text>{val.name}</Text>
             <Text>Hand: {val.hand.map((card) => `${card.name},`)}</Text>
             <Text>Discard: {val.discard.map((card) => `${card.name},`)}</Text>
@@ -78,6 +99,15 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
             <Divider />
           </Box>
         ))}
+
+        <Text
+          size="xl"
+          fw={900}
+          variant="gradient"
+          gradient={{ from: 'red', to: 'cyan', deg: 45 }}
+        >
+          Your hand
+        </Text>
       </Box>
     );
   }

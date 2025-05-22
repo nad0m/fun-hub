@@ -1,13 +1,25 @@
 import { GameConfig } from 'types';
+import tictactoe from '../assets/app/tictactoe.jpeg';
+import themind from '../assets/app/themind.jpeg';
+import loveletter from '../assets/app/loveletters.webp';
 
 export const GAMES_GLOSSARY: Record<string, GameConfig> = {
+  LoveLetter: {
+    id: 'LoveLetter',
+    title: 'Love Letter',
+    description:
+      'Meld minds with your fellow players to play cards in order without talking.',
+    path: '/loveletter',
+    thumbnail: loveletter,
+    minPlayers: 2,
+    maxPlayers: 4,
+  },
   TicTacToe: {
     id: 'TicTacToe',
     title: 'Tic-Tac-Toe',
     description: 'Exes and Ohs.',
     path: '/tictactoe',
-    thumbnail:
-      'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/tictactoe.jpeg',
+    thumbnail: tictactoe,
     minPlayers: 2,
     maxPlayers: 2,
   },
@@ -17,20 +29,8 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     description:
       'Meld minds with your fellow players to play cards in order without talking.',
     path: '/themind',
-    thumbnail:
-      'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/themind.jpeg',
+    thumbnail: themind,
     minPlayers: 2,
     maxPlayers: 10,
-  },
-  LoveLetter: {
-    id: 'LoveLetter',
-    title: 'Love Letters',
-    description:
-      'Meld minds with your fellow players to play cards in order without talking.',
-    path: '/loveletter',
-    thumbnail:
-      'https://rltoyprbcdzvrivtojcc.supabase.co/storage/v1/object/public/assets/fun-hub/themind.jpeg',
-    minPlayers: 2,
-    maxPlayers: 4,
   },
 };
