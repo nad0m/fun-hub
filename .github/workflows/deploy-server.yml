@@ -8,20 +8,18 @@ on:
       - "yarn.lock"
       - ".yarnrc.yml"
       - ".github/workflows/deploy-server.yml"
+      - "fly.toml"
     branches:
       - main
   workflow_dispatch:
 
 jobs:
   deploy:
-    environment: github-pages
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
+    environment: github-pages
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install flyctl
