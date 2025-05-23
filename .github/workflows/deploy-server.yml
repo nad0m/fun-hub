@@ -14,6 +14,7 @@ on:
 
 jobs:
   deploy:
+    environment: github-pages
     runs-on: ubuntu-latest
     defaults:
       run:
