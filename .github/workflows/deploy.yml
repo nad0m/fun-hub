@@ -1,5 +1,6 @@
 name: Deploy client to GitHub Pages
 env:
+  NODE_ENV: production
   VITE_ATOM_SOCKET_API: ${{ secrets.VITE_ATOM_SOCKET_API }}
 
 on:
