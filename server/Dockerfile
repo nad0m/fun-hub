@@ -27,7 +27,7 @@ COPY --from=builder /app/dist ./dist
 COPY package*.json ./
 
 # 10. Install production dependencies only
-RUN npm ci --only=production
+RUN npm install
 
 # 11. Expose port (default Fly.io internal port is 8080)
 EXPOSE 8080
