@@ -1,36 +1,51 @@
-# 1. Use an official Node.js image
+# Stage 1: Build
 FROM node:18-alpine AS builder
 
-# 2. Set working directory
+# Enable corepack to use Yarn v4
+RUN corepack enable
+
+# Set working directory
 WORKDIR /app
 
-# 3. Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy root yarn config and lockfile
+COPY .yarnrc.yml ./
+COPY yarn.lock ./
+COPY package.json ./
 
-# 4. Install dependencies
-RUN npm install
+# Copy all relevant workspace packages (server and shared code in games)
+COPY server/package.json server/package.json
+COPY games/package.json games/package.json
 
-# 5. Copy source files
-COPY . .
+# Install only necessary dependencies for server + games
+RUN yarn workspaces focus --all
 
-# 6. Build the app
-RUN npm run build
+# Copy source code for both workspaces
+COPY server/tsconfig.json server/tsconfig.json
+COPY server/webpack.config.js server/webpack.config.js
+COPY server/src server/src
+COPY games games
 
-# 7. Use a smaller image for production
+# Build the server app
+WORKDIR /app/server
+RUN yarn build
+
+# Stage 2: Production Image
 FROM node:18-alpine AS runner
 
-# 8. Set working directory
 WORKDIR /app
 
-# 9. Copy the built bundle and any needed assets
-COPY --from=builder /app/dist ./dist
-COPY package*.json ./
+RUN corepack enable
 
-# 10. Install production dependencies only
-RUN npm install
+# Copy compiled code and dependencies
+COPY --from=builder /app/server/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/yarn.lock ./yarn.lock
+COPY --from=builder /app/.yarnrc.yml ./
 
-# 11. Expose port (default Fly.io internal port is 8080)
+# Production install if needed (optional; often not needed if modules are already copied)
+# RUN yarn workspaces focus --production server
+
 EXPOSE 8080
 
-# 12. Start the app
 CMD ["node", "dist/bundle.js"]
