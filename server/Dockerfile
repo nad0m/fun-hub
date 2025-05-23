@@ -1,36 +1,36 @@
-# syntax = docker/dockerfile:1
+# 1. Use an official Node.js image
+FROM node:18-alpine AS builder
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.16.0
-FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="Node.js"
-
-# Node.js app lives here
+# 2. Set working directory
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
+# 3. Copy package.json and package-lock.json
+COPY package*.json ./
 
+# 4. Install dependencies
+RUN npm ci
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+# 5. Copy source files
+COPY . .
 
-# Copy application code
-COPY --link . .
+# 6. Build the app
+RUN npm run build
 
+# 7. Use a smaller image for production
+FROM node:18-alpine AS runner
 
-# Final stage for app image
-FROM base
+# 8. Set working directory
+WORKDIR /app
 
-# Copy built application
-COPY --from=build /app /app
-RUN ls
-COPY dist/bundle.js /app
+# 9. Copy the built bundle and any needed assets
+COPY --from=builder /app/dist ./dist
+COPY package*.json ./
 
-# Start the server by default, this can be overwritten at runtime
+# 10. Install production dependencies only
+RUN npm ci --only=production
+
+# 11. Expose port (default Fly.io internal port is 8080)
 EXPOSE 8080
-CMD ["node", "/dist/bundle.js"]
+
+# 12. Start the app
+CMD ["node", "dist/bundle.js"]
