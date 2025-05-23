@@ -1,0 +1,10 @@
+{
+  "watch": [
+    "src/**",
+    "../games/src/**"
+  ],
+  "ext": "ts,json",
+  "inspect": true,
+  "verbose": true,
+  "exec": "ts-node -r ./preload src/server.ts"
+}
