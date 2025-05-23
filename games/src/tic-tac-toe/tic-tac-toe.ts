@@ -12,7 +12,7 @@ export type TicTacToeState = MultiplayerGameWithLobbyState & {
   cells: (string | null)[]
 }
 
-const resetGame = G => {
+const resetGame = (G: TicTacToeState) => {
   G.winner = ''
   G.cells = Array(9).fill(null)
 }
