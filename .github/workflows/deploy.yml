@@ -27,16 +27,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Enable Corepack and activate Yarn 4.1.0
+        run: |
+          corepack enable
+          corepack prepare yarn@4.1.0 --activate
+
       - name: Set up Node and enable Corepack
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: "yarn"
-
-      - name: Enable Corepack and activate Yarn 4.1.0
-        run: |
-          corepack enable
-          corepack prepare yarn@4.1.0 --activate
 
       - name: Install dependencies (Yarn workspace)
         run: yarn install --frozen-lockfile
