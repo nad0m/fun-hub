@@ -1,37 +1,36 @@
-# Stage 1: Build
+# 1. Use an official Node.js image
 FROM node:18-alpine AS builder
 
-# Set working directory
+# 2. Set working directory
 WORKDIR /app
 
-# Copy root-level yarn.lock and server/package.json
-COPY yarn.lock ./
-COPY server/package.json ./package.json
-COPY server/tsconfig.json ./tsconfig.json
-COPY server/webpack.config.js ./webpack.config.js
+# 3. Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Copy server source files
-COPY server/src ./src
+# 4. Install dependencies
+RUN npm ci
 
-# Install dependencies and build
-RUN yarn install --frozen-lockfile
-RUN yarn build
+# 5. Copy source files
+COPY . .
 
-# Stage 2: Production
+# 6. Build the app
+RUN npm run build
+
+# 7. Use a smaller image for production
 FROM node:18-alpine AS runner
 
+# 8. Set working directory
 WORKDIR /app
 
-# Copy dist output and package.json
+# 9. Copy the built bundle and any needed assets
 COPY --from=builder /app/dist ./dist
-COPY server/package.json ./package.json
-COPY yarn.lock ./yarn.lock
+COPY package*.json ./
 
-# Install only production dependencies
-RUN yarn install --frozen-lockfile --production
+# 10. Install production dependencies only
+RUN npm ci --only=production
 
-# Expose default Fly.io port
+# 11. Expose port (default Fly.io internal port is 8080)
 EXPOSE 8080
 
-# Start the app
+# 12. Start the app
 CMD ["node", "dist/bundle.js"]
