@@ -32,5 +32,5 @@ RUN ls
 COPY dist/server.js /app
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 8000
+EXPOSE 8080
 CMD ["node", "dist/bundle.js"]

@@ -69,6 +69,6 @@ server.router.post('/force-play', bodyParser(), async (ctx) => {
   };
 });
 
-const PORT = 8000;
+const PORT = 8080;
 
 server.run(PORT);
