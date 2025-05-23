@@ -1,0 +1,30 @@
+name: Deploy Client to GitHub Pages
+env:
+  VITE_ATOM_SOCKET_API: ${{ secrets.VITE_ATOM_SOCKET_API }}
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Enable Corepack & Install deps
+        run: |
+          corepack enable
+          yarn set version stable
+          yarn workspaces focus client --all
+
+      - name: Build client
+        working-directory: client
+        run: yarn build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./client/dist
