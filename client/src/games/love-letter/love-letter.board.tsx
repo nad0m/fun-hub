@@ -50,7 +50,7 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
     console.log({ currentPlayer });
 
     return (
-      <Box w="100vw" maw={700} p="md">
+      <Box w="96vw" maw={700} p="md">
         <Stack gap="xs" mb="md">
           {players.map((player, idx) => (
             <LoveLetterPlayerCard
