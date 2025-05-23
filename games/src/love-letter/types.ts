@@ -55,12 +55,6 @@ export type LoveLetterStages = {
     }
     next: 'EndTurn'
   }
-  Princess: {
-    moves: {
-      proceed: () => void
-    }
-    next: 'EndTurn'
-  }
   EndTurn: {
     moves: {
       endTurn: () => void
