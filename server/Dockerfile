@@ -29,8 +29,8 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 RUN ls
-COPY dist/bundle.js /app
+COPY server/dist/bundle.js /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 8080
-CMD ["node", "dist/bundle.js"]
+CMD ["node", "/server/dist/bundle.js"]
