@@ -1,36 +1,37 @@
-# Use a base image
+# Stage 1: Build
 FROM node:18-alpine AS builder
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy root-level yarn.lock into context
-COPY ../yarn.lock ./yarn.lock
+# Copy root-level yarn.lock and server/package.json
+COPY yarn.lock ./
+COPY server/package.json ./package.json
+COPY server/tsconfig.json ./tsconfig.json
+COPY server/webpack.config.js ./webpack.config.js
 
-# Copy server package and all necessary config files
-COPY . .
+# Copy server source files
+COPY server/src ./src
 
-# Install all dependencies using root-level yarn.lock
+# Install dependencies and build
 RUN yarn install --frozen-lockfile
-
-# Build the project
 RUN yarn build
 
-# Final minimal image
+# Stage 2: Production
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# Copy only the dist directory and package.json
+# Copy dist output and package.json
 COPY --from=builder /app/dist ./dist
-COPY package.json ./
+COPY server/package.json ./package.json
+COPY yarn.lock ./yarn.lock
 
 # Install only production dependencies
-COPY ../yarn.lock ./yarn.lock
 RUN yarn install --frozen-lockfile --production
 
-# Expose the port your app uses (Fly expects 8080 by default)
+# Expose default Fly.io port
 EXPOSE 8080
 
-# Start your server
+# Start the app
 CMD ["node", "dist/bundle.js"]

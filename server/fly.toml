@@ -7,6 +7,8 @@ app = "fun-hub"
 primary_region = "sjc"
 
 [build]
+  dockerfile = "server/Dockerfile"
+  context = "."  # root of the repo
 
 [http_service]
   internal_port = 8080
