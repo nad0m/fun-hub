@@ -1,23 +1,33 @@
 import {
+  Blockquote,
   Box,
   Button,
+  Container,
   Divider,
   Group,
+  Indicator,
+  Paper,
   SimpleGrid,
   Stack,
   Text,
 } from '@mantine/core';
-import { LoveLetterState } from '@games';
+import {
+  LoveLetterState,
+  LoveLetterStages,
+  StageMoves,
+  StageKey,
+} from '@games';
 import { GameBoardPropsWrapper } from 'components';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
+import { ActionMap } from './action-map';
 
 export const LoveLetterBoard = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
     const {
       G,
-      ctx: { currentPlayer },
+      ctx: { currentPlayer, activePlayers },
       playerID,
       matchData,
       moves,
@@ -27,15 +37,21 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
 
     const priestData = G.players[playerID as string]?.priestData;
     const baronData = G.players[playerID as string]?.baronData;
-    const players = Object.values(G.players);
+    const players = Object.values(G.players).filter(
+      ({ id }) => id !== playerID
+    );
+    const clientPlayer = G.players[playerID || ''];
+    const isClientTurn = currentPlayer === playerID;
+    const currentStage: StageKey | null =
+      (activePlayers?.[playerID || ''] as StageKey) || null;
 
     console.log(props);
 
     console.log({ currentPlayer });
 
     return (
-      <Box>
-        <Stack gap="xs">
+      <Box w="100vw" maw={700} p="md">
+        <Stack gap="xs" mb="md">
           {players.map((player, idx) => (
             <LoveLetterPlayerCard
               key={idx}
@@ -43,71 +59,43 @@ export const LoveLetterBoard = GameBoardPropsWrapper(
               hasBorder={currentPlayer === player.id}
             />
           ))}
+          <Divider />
+          <LoveLetterPlayerCard
+            player={clientPlayer}
+            hasBorder={currentPlayer === clientPlayer.id}
+            isClientPlayer
+          />
         </Stack>
-        <Text>{G.message}</Text>
-        {priestData && (
-          <Text>
-            {priestData.targetName}: {priestData.targetCard.name}
-          </Text>
-        )}
-
-        {baronData && (
-          <Box>
-            <Text>
-              {baronData.targetName}: {baronData.targetCard.name}
-            </Text>
-            <Text>
-              {baronData.playerName}: {baronData.playerCard.name}
-            </Text>
-          </Box>
-        )}
-        <SimpleGrid cols={5}>
-          <Button onClick={() => moves.stageCard('Guard')}>Guard card</Button>
-          <Button onClick={() => moves.stageCard('Priest')}>Priest card</Button>
-          <Button onClick={() => moves.stageCard('Baron')}>Baron card</Button>
-          <Button onClick={() => moves.stageCard('Handmaid')}>
-            Handmaid card
-          </Button>
-          <Button onClick={() => moves.stageCard('Prince')}>Prince card</Button>
-          <Button onClick={() => moves.stageCard('King')}>King card</Button>
-          <Button onClick={() => moves.stageCard('Countess')}>
-            Countess card
-          </Button>
-          <Button onClick={() => moves.stageCard('Princess')}>
-            Princess card
-          </Button>
-
-          <Button onClick={() => moves.targetPlayer('0')}>Target 0</Button>
-          <Button onClick={() => moves.targetPlayer('1')}>Target 1</Button>
-          <Button onClick={() => moves.proceed('0')}>Proceed 0</Button>
-          <Button onClick={() => moves.proceed('1')}>Proceed 1</Button>
-          <Button
-            onClick={() => moves.guessCard({ targetId: 1, guess: 'Prince' })}
-          >
-            Guess card
-          </Button>
-          <Button onClick={() => moves.endTurn()}>End turn</Button>
-        </SimpleGrid>
-
-        {Object.values(G.players).map((val, idx) => (
-          <Box key={idx}>
-            <Text>{val.name}</Text>
-            <Text>Hand: {val.hand.map((card) => `${card.name},`)}</Text>
-            <Text>Discard: {val.discard.map((card) => `${card.name},`)}</Text>
-            <Text>IsActive: {val.isActive ? 'true' : 'false'}</Text>
-            <Text>IsProtected: {val.isProtected ? 'true' : 'false'}</Text>
-            <Divider />
-          </Box>
-        ))}
-
-        <Text
-          size="xl"
-          fw={900}
-          variant="gradient"
-          gradient={{ from: 'red', to: 'cyan', deg: 45 }}
+        <Paper
+          display="flex"
+          color="teal"
+          p="xs"
+          pos="sticky"
+          bg="dark"
+          bottom={0}
+          radius={0}
+          mx={-24}
+          mb={-24}
+          style={{ zIndex: 99, justifyContent: 'center' }}
         >
-          Your hand
-        </Text>
+          <Text c="teal.4">{G.message}</Text>
+        </Paper>
+        {(isClientTurn || baronData) && (
+          <Paper
+            color="teal"
+            py="sm"
+            px="xl"
+            pos="sticky"
+            bg="dark"
+            bottom={0}
+            radius={0}
+            mx={-24}
+            mt="md"
+            style={{ zIndex: 99, justifyContent: 'center' }}
+          >
+            {ActionMap[currentStage](props)}
+          </Paper>
+        )}
       </Box>
     );
   }

@@ -30,6 +30,7 @@ export type BaronData = {
 
 export type LoveLetterPlayer = MultiplayerGamePlayer & {
   name?: string
+  target?: string | null
   id: string
   hand: Card[]
   discard: Card[]
@@ -50,20 +51,20 @@ export type EffectFn = (
   gameState: LoveLetterState,
 ) => LoveLetterState | boolean | void
 
-export function createDeck(): Card[] {
-  const baseCards: { name: CardName; value: number; count: number }[] = [
-    { name: 'Guard', value: 1, count: 5 },
-    { name: 'Priest', value: 2, count: 2 },
-    { name: 'Baron', value: 3, count: 2 },
-    { name: 'Handmaid', value: 4, count: 2 },
-    { name: 'Prince', value: 5, count: 2 },
-    { name: 'King', value: 6, count: 1 },
-    { name: 'Countess', value: 7, count: 1 },
-    { name: 'Princess', value: 8, count: 1 },
-  ]
+export const BaseCards: { name: CardName; value: number; count: number }[] = [
+  { name: 'Guard', value: 1, count: 5 },
+  { name: 'Priest', value: 2, count: 2 },
+  { name: 'Baron', value: 3, count: 2 },
+  { name: 'Handmaid', value: 4, count: 2 },
+  { name: 'Prince', value: 5, count: 2 },
+  { name: 'King', value: 6, count: 1 },
+  { name: 'Countess', value: 7, count: 1 },
+  { name: 'Princess', value: 8, count: 1 },
+]
 
+export function createDeck(): Card[] {
   const cards: Card[] = []
-  for (const { name, value, count } of baseCards) {
+  for (const { name, value, count } of BaseCards) {
     for (let i = 0; i < count; i++) {
       cards.push({ name, value, count })
     }
@@ -94,7 +95,7 @@ export const playCard = (G: LoveLetterState, currentPlayer: string, cardName: st
 
 export const checkTargets = (G: LoveLetterState, currentPlayer: string) => {
   const others = Object.values(G.players).filter(({ id }) => id !== currentPlayer)
-  const hasTargets = others.some(player => !player.isProtected)
+  const hasTargets = others.some(player => !player.isProtected && player.isActive)
 
   return hasTargets
 }

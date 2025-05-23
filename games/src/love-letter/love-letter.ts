@@ -109,6 +109,19 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 return
               }
 
+              // check if handmaid is played
+              if (cardName === 'Handmaid') {
+                invokeHandmaidEffect(G, currentPlayer)
+                const playerName = getPlayerName(G, currentPlayer)
+                broadcastMessage(G, `${playerName} is protected until their next round.`)
+                events?.setActivePlayers({
+                  currentPlayer: {
+                    stage: 'EndTurn',
+                  },
+                })
+                return
+              }
+
               events?.setActivePlayers({
                 currentPlayer: {
                   stage: cardName,
@@ -124,10 +137,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 return
               }
 
-              const playerName = getPlayerName(G, currentPlayer)
-              const targetName = getPlayerName(G, targetId)
+              const player = getPlayer(G, currentPlayer)
+              const target = getPlayer(G, targetId)
 
-              broadcastMessage(G, `${playerName} targets ${targetName}. Guessing card...`)
+              player.target = target.id
+
+              broadcastMessage(G, `${player.name} targets ${target.name}. Guessing card...`)
 
               events?.endStage()
             },
@@ -136,23 +151,18 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         },
         GuardTarget: {
           moves: {
-            guessCard: (
-              G,
-              { currentPlayer, events },
-              payload: { targetId: string; guess: CardName },
-            ) => {
-              if (targetIsProtected(G, payload.targetId)) {
-                return
-              }
+            guessCard: (G, { currentPlayer, events }, guess: CardName) => {
+              const player = getPlayer(G, currentPlayer)
 
-              const playerName = getPlayerName(G, currentPlayer)
-              const { targetId, guess } = payload
-
-              const success = invokeGuardEffect(G, { currentPlayer, targetId, guess })
+              const success = invokeGuardEffect(G, {
+                currentPlayer,
+                targetId: player.target as string,
+                guess,
+              })
 
               broadcastMessage(
                 G,
-                `${playerName} guesses ${guess}. ${success ? 'Correct!' : 'Wrong!'}`,
+                `${player.name} guesses ${guess}. ${success ? 'Correct!' : 'Wrong!'}`,
               )
 
               events?.endStage()
@@ -167,10 +177,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 return
               }
 
-              const playerName = getPlayerName(G, currentPlayer)
-              const targetName = getPlayerName(G, targetId)
+              const player = getPlayer(G, currentPlayer)
+              const target = getPlayer(G, targetId)
 
-              broadcastMessage(G, `${playerName} targets ${targetName}. Viewing card...`)
+              player.target = target.id
+
+              broadcastMessage(G, `${player.name} targets ${target.name}. Viewing card...`)
 
               invokePriestEffect(G, currentPlayer, targetId)
 
@@ -184,13 +196,11 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
             proceed: (G, { events, currentPlayer }) => {
               const player = getPlayer(G, currentPlayer)
               player.priestData = null
+              player.target = null
 
-              broadcastMessage(G, 'Proceeding...')
-
-              events?.endStage()
+              events?.endTurn()
             },
           },
-          next: 'EndTurn',
         },
         Baron: {
           moves: {
@@ -199,38 +209,31 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 return
               }
 
-              const playerName = getPlayerName(G, currentPlayer)
-              const targetName = getPlayerName(G, targetId)
+              const player = getPlayer(G, currentPlayer)
+              const target = getPlayer(G, targetId)
 
-              broadcastMessage(G, `${playerName} targets ${targetName}. Comparing hands...`)
+              player.target = target.id
+
+              broadcastMessage(G, `${player.name} targets ${target.name}. Comparing hands...`)
 
               compareHands(G, currentPlayer, targetId)
 
-              events?.endStage()
+              events?.setActivePlayers({
+                value: {
+                  [currentPlayer]: 'BaronEffect',
+                  [targetId]: 'BaronEffectForTarget',
+                },
+              })
             },
           },
-          next: 'BaronEffect',
         },
         BaronEffect: {
           moves: {
-            proceed: (G, { events, currentPlayer }, targetId: string) => {
-              if (targetIsProtected(G, targetId)) {
-                return
-              }
-
-              const message = invokeBaronEffect(G, currentPlayer, targetId)
-              broadcastMessage(G, message)
-              events?.endStage()
-            },
-          },
-          next: 'EndTurn',
-        },
-        Handmaid: {
-          moves: {
             proceed: (G, { events, currentPlayer }) => {
-              invokeHandmaidEffect(G, currentPlayer)
-              const playerName = getPlayerName(G, currentPlayer)
-              broadcastMessage(G, `${playerName} is protected until their next round.`)
+              const player = getPlayer(G, currentPlayer)
+              const message = invokeBaronEffect(G, currentPlayer, player.target as string)
+              broadcastMessage(G, message)
+
               events?.endStage()
             },
           },
@@ -266,20 +269,10 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
           },
           next: 'EndTurn',
         },
-        Princess: {
-          moves: {
-            proceed: (G, { events, currentPlayer }) => {
-              const player = getPlayer(G, currentPlayer)
-              player.isActive = false
-              broadcastMessage(G, `${player.name} is eliminated.`)
-              events?.endStage()
-            },
-          },
-          next: 'EndTurn',
-        },
         EndTurn: {
           moves: {
-            endTurn: (_G, { events }) => {
+            endTurn: (G, { events, currentPlayer }) => {
+              getPlayer(G, currentPlayer).target = null
               events?.endTurn()
             },
           },
@@ -309,6 +302,7 @@ export const LoveLetter: Game<LoveLetterState> = {
       players[playerId] = {
         id: playerId,
         name: `Player ${idx}`,
+        target: null,
         hand: [deck.pop() as Card],
         discard: [],
         isReady: false,
