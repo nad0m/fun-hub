@@ -1,41 +1,36 @@
-# 1. Use a Node.js base image
+# Use a base image
 FROM node:18-alpine AS builder
 
-# 2. Set working directory for the build
+# Set working directory inside container
 WORKDIR /app
 
-# 3. Copy only relevant files
-COPY yarn.lock ./
-COPY server/package.json ./server/package.json
-COPY server/tsconfig.json ./server/tsconfig.json
-COPY server/webpack.config.js ./server/webpack.config.js
+# Copy root-level yarn.lock into context
+COPY ../yarn.lock ./yarn.lock
 
-# 4. Copy the rest of the source files
-COPY server/src ./server/src
+# Copy server package and all necessary config files
+COPY . .
 
-# 5. Change working directory to /server
-WORKDIR /app/server
-
-# 6. Install deps from root yarn.lock
+# Install all dependencies using root-level yarn.lock
 RUN yarn install --frozen-lockfile
 
-# 7. Build the app
+# Build the project
 RUN yarn build
 
-# 8. Final minimal image
+# Final minimal image
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# 9. Copy necessary runtime files
-COPY --from=builder /app/server/dist ./dist
-COPY server/package.json ./
+# Copy only the dist directory and package.json
+COPY --from=builder /app/dist ./dist
+COPY package.json ./
 
-# 10. Install only production dependencies
-RUN yarn install --production --frozen-lockfile
+# Install only production dependencies
+COPY ../yarn.lock ./yarn.lock
+RUN yarn install --frozen-lockfile --production
 
-# 11. Expose port (Fly default is 8080)
+# Expose the port your app uses (Fly expects 8080 by default)
 EXPOSE 8080
 
-# 12. Run the app
+# Start your server
 CMD ["node", "dist/bundle.js"]
