@@ -1,6 +1,6 @@
 {
   "author": "Adam Nguyen",
-  "name": "atom-socket",
+  "name": "server",
   "license": "MIT",
   "version": "1.0.0",
   "main": "src/server.ts",
