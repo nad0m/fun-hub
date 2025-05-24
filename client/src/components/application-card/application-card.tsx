@@ -21,6 +21,7 @@ import { useLobbyService } from 'hooks';
 import { triggerNotification } from 'utils/trigger-notification';
 import { useNavigate } from 'react-router-dom';
 import classes from './application-card.module.css';
+import { isLink } from 'utils/validators';
 
 type ApplicationCardProps = {
   game: GameConfig;
@@ -121,6 +122,14 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
             flex={1}
             variant="light"
             disabled={form.values.roomCode.length === 0}
+            onClick={() => {
+              const roomCode = form.values.roomCode;
+              if (isLink(roomCode)) {
+                window.location.href = roomCode;
+              } else {
+                navigate(`${game.path}/${roomCode}`);
+              }
+            }}
           >
             Join
           </Button>

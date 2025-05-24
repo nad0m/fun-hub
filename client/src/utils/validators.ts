@@ -17,3 +17,12 @@ export const validatePlayerData = (data: any) => {
     isNonEmptyString(data.playerID) && isNonEmptyString(data.playerCredentials)
   );
 };
+
+export const isLink = (str: string): boolean => {
+  try {
+    const url = new URL(str);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
