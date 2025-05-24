@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node -r ./preload ../node_modules/.bin/vite",
     "build": "vite build && cp ./dist/index.html ./dist/404.html",
-    "preview": "vite preview",
+    "preview": "vite build && vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "npm run lint:eslint && npm run lint:stylelint",
     "lint:eslint": "eslint . --ext .ts,.tsx --cache",

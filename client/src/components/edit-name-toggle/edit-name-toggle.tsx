@@ -1,4 +1,4 @@
-import { ActionIcon, Modal, Tooltip } from '@mantine/core';
+import { ActionIcon, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPencil } from '@tabler/icons-react';
 import { PlayerRegister } from 'components/player-register';
@@ -9,6 +9,8 @@ import { useLocation } from 'react-router-dom';
 export const EditNameToggle: FC = () => {
   const { pathname } = useLocation();
   const [opened, { open, close }] = useDisclosure(false);
+
+  console.log({ pathname });
 
   if (pathname !== BASE_ROUTE) {
     return;
