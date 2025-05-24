@@ -19,7 +19,7 @@ export function AppTitle() {
           variant="gradient"
           component="span"
           gradient={{ from: 'pink', to: 'yellow' }}
-          style={{ fontSize: 32, fontWeight: 900 }}
+          style={{ fontSize: 24, fontWeight: 900 }}
         >
           Fun Hub
         </Text>

@@ -7,3 +7,4 @@ export * from './count-down';
 export * from './card-container';
 export * from './player-register';
 export * from './utilities/game-board-wrapper';
+export * from './edit-name-toggle';

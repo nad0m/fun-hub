@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import { AppShell, MantineProvider } from '@mantine/core';
+import { AppShell, Group, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Notifications } from '@mantine/notifications';
 import { ThemeToggle } from 'components/theme-toggle';
@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { BASE_ROUTE } from 'config/constants';
 import { Router } from './router';
 import { theme } from './theme';
-import { AppTitle } from './components';
+import { AppTitle, EditNameToggle } from './components';
 import '@mantine/notifications/styles.css';
 
 export default function App() {
@@ -27,7 +27,10 @@ export default function App() {
               }}
             >
               <AppTitle />
-              <ThemeToggle />
+              <Group>
+                <EditNameToggle />
+                <ThemeToggle />
+              </Group>
             </AppShell.Header>
             <AppShell.Main>
               <Router />

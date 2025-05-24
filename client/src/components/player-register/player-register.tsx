@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { Button, Modal, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconSend2 } from '@tabler/icons-react';
@@ -6,21 +6,34 @@ import { useLocalStorage } from 'usehooks-ts';
 
 type PlayerRegisterProps = {
   gameTitle: string;
+  opened?: boolean;
+  close?: () => void;
 };
 
-export const PlayerRegister: FC<PlayerRegisterProps> = ({ gameTitle }) => {
-  const [, setPlayerName] = useLocalStorage<string>('playerName', '');
+export const PlayerRegister: FC<PlayerRegisterProps> = ({
+  gameTitle,
+  opened = true,
+  close = () => null,
+}) => {
+  const [playerName, setPlayerName] = useLocalStorage<string>('playerName', '');
 
-  const form = useForm({ initialValues: { playerName: '' } });
-  const handleSubmit = form.onSubmit((values) =>
-    setPlayerName(values.playerName)
-  );
+  const form = useForm({ initialValues: { playerName } });
+  const handleSubmit = form.onSubmit((values) => {
+    setPlayerName(values.playerName);
+    close?.();
+  });
+
+  useEffect(() => {
+    if (playerName) {
+      form.setValues({ playerName });
+    }
+  }, [playerName]);
 
   return (
     <Modal
-      opened
+      opened={opened}
       withCloseButton={false}
-      onClose={() => null}
+      onClose={close}
       title={
         <Text
           inherit
