@@ -14,7 +14,7 @@ export default function App() {
   const queryClient = new QueryClient();
   return (
     <BrowserRouter basename={BASE_ROUTE}>
-      <MantineProvider theme={theme}>
+      <MantineProvider theme={theme} defaultColorScheme="dark">
         <Notifications />
         <QueryClientProvider client={queryClient}>
           <AppShell header={{ height: 60 }} padding={24}>

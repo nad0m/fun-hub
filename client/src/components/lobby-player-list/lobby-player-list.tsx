@@ -18,6 +18,7 @@ import { MultiplayerGameWithLobbyState } from '@games';
 import { FilteredMetadata } from 'boardgame.io';
 import { FC } from 'react';
 import { generateColor } from 'utils/generate-color';
+import { useMediaQuery } from '@mantine/hooks';
 
 type LobbyPlayerListProps = {
   gameState: MultiplayerGameWithLobbyState;
@@ -32,6 +33,8 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
   clientPlayerID,
   moves,
 }) => {
+  const tablet = useMediaQuery('(min-width: 500px)');
+
   return (
     <Stack>
       {matchData?.map((player) => {
@@ -46,9 +49,9 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
             w="100%"
             style={{ justifyContent: 'space-between' }}
             align="center"
-            gap={24}
+            gap={tablet ? 24 : 12}
           >
-            <Flex align="center" gap={8} w={250}>
+            <Flex align="center" gap={8} w={tablet ? 250 : 170}>
               {player.isConnected ? (
                 <Avatar color={playerColor} radius="xl" size={28}>
                   {player.name?.slice(0, 2).toUpperCase() || 'N/A'}
@@ -73,7 +76,7 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
             )}
             <Button
               variant="light"
-              size="xs"
+              size={tablet ? 'xs' : 'compact-sm'}
               color={isReady ? 'teal' : 'gray'}
               onClick={() => moves?.toggleReady()}
               rightSection={

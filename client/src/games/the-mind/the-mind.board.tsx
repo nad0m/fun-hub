@@ -31,8 +31,7 @@ const TheMindBoardComponent = (props: FunHubBoardProps<TheMindState>) => {
     log,
     gameConfig,
   } = props;
- 
-  console.log("hello world")  
+
   if (phase === CommonGamePhases.PlayPhase) {
     return (
       <Container my="md" display="flex">

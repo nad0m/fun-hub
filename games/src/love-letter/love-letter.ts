@@ -1,6 +1,6 @@
 import { ActivePlayers } from 'boardgame.io/core'
 import { Ctx, Game, PhaseMap } from 'boardgame.io'
-import { CommonGamePhases } from '../types'
+import { CommonGamePhases, GAME_START_COUNTDOWN_SECONDS } from '../types'
 import {
   broadcastMessage,
   Card,
@@ -26,6 +26,28 @@ import {
 } from './card-effects'
 
 const phases: PhaseMap<LoveLetterState, Ctx> = {
+  [CommonGamePhases.ReadyUpPhase]: {
+    onBegin: G => {
+      G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
+    },
+    moves: {
+      toggleReady: (G, ctx) => {
+        G.players[ctx.playerID as string].isReady = !G.players[ctx.playerID as string].isReady
+
+        if (!G.players[ctx.playerID as string].isReady) {
+          G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
+        }
+      },
+      countDownToTransition: G => {
+        G.gameStartTimer -= 1
+      },
+    },
+    endIf: G => {
+      return G.gameStartTimer === 0
+    },
+    start: true,
+    next: CommonGamePhases.PlayPhase,
+  },
   [CommonGamePhases.PlayPhase]: {
     turn: {
       onBegin: (G, { events, currentPlayer }) => {
@@ -288,7 +310,6 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
       //   players.every(({ hand }) => hand.length === 1)
       // )
     },
-    start: true,
   },
 }
 

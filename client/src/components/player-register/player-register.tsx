@@ -40,7 +40,7 @@ export const PlayerRegister: FC<PlayerRegisterProps> = ({ gameTitle }) => {
         onSubmit={handleSubmit}
       >
         <TextInput
-          flex={5}
+          flex={7}
           label="Name"
           placeholder="Enter your name"
           required
@@ -49,7 +49,7 @@ export const PlayerRegister: FC<PlayerRegisterProps> = ({ gameTitle }) => {
           {...form.getInputProps('playerName')}
         />
         <Button
-          flex={1}
+          flex={2}
           type="submit"
           variant="outline"
           rightSection={<IconSend2 size={16} />}

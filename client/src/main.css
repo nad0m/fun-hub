@@ -3,3 +3,7 @@ body {
   overscroll-behavior: none;
   overflow: scroll;
 }
+
+.bgio-client {
+  width: 100%;
+}
