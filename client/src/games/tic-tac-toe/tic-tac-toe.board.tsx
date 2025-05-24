@@ -3,9 +3,20 @@ import { FunHubBoardProps } from 'types';
 import { GameBoardPropsWrapper } from 'components';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import styles from './tic-tac-toe.module.css';
+import { Button, Center, Stack, Text } from '@mantine/core';
+import { IconCircle, IconX } from '@tabler/icons-react';
 
 const range = (max: number, min: number = 0): number[] =>
   [...Array(max - min)].map((_, i) => i + min);
+
+const getPlayerIcon = (id: string | null) => {
+  if (!id) return '';
+  return id === '1' ? (
+    <IconX color="red" size={42} />
+  ) : (
+    <IconCircle color="blue" size={36} />
+  );
+};
 
 const getPlayerChar = (id: string | null) => {
   if (!id) return '';
@@ -25,54 +36,53 @@ const TicTacToeBoardComponent = (props: FunHubBoardProps<TicTacToeState>) => {
   const isEndGame = playerHasWon || isDraw;
 
   const turnPlayerLabel =
-    currentPlayer === playerID ? 'Your' : `${getPlayerChar(currentPlayer)}'s`;
+    currentPlayer === playerID ? 'Your' : `${getPlayerChar(playerID)}'s`;
 
   return (
-    <div>
-      {!isEndGame && <div>{turnPlayerLabel} turn</div>}
+    <Center style={{ flexDirection: 'column', gap: 8 }}>
+      {!isEndGame && (
+        <Text fw={600} c="cyan">
+          {turnPlayerLabel} turn
+        </Text>
+      )}
       {isEndGame && (
-        <div>
-          Game Result:{' '}
-          <label>
+        <Stack>
+          <Text fw={600} c="cyan">
             {playerHasWon
               ? `${getPlayerChar(G.winner)} is the winner!`
               : 'Draw'}
-          </label>
-          <button
-            style={{ display: 'block' }}
-            onClick={() => moves.resetGame()}
-          >
-            Reset Game
-          </button>{' '}
-        </div>
+          </Text>
+          <Button size="xs" variant="light" onClick={() => moves.resetGame()}>
+            Reset game
+          </Button>
+        </Stack>
       )}
-      <table id="board" className={styles.gameBoard + styles.boardDisabled}>
+      <table id="board" className={styles.gameBoard}>
         <tbody>
           {range(3).map((i) => (
-            <tr key={i}>
+            <Center key={i}>
               {range(3).map((j) => {
                 const id = i * 3 + j;
                 return (
-                  <td
+                  <Center
                     key={j}
                     style={{
+                      flexDirection: 'column',
                       border: '1px solid #555',
-                      width: '50px',
-                      height: '50px',
-                      lineHeight: '50px',
-                      textAlign: 'center',
+                      width: '15vw',
+                      height: '15vw',
                     }}
                     onClick={() => props.moves.clickCell(id)}
                   >
-                    {getPlayerChar(props.G.cells[id])}
-                  </td>
+                    {getPlayerIcon(props.G.cells[id])}
+                  </Center>
                 );
               })}
-            </tr>
+            </Center>
           ))}
         </tbody>
       </table>
-    </div>
+    </Center>
   );
 };
 

@@ -1,5 +1,8 @@
 .gameBoard {
   user-select: none;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .boardDisabled {
