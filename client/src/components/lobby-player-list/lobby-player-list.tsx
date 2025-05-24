@@ -19,6 +19,7 @@ import { FilteredMetadata } from 'boardgame.io';
 import { FC } from 'react';
 import { generateColor } from 'utils/generate-color';
 import { useMediaQuery } from '@mantine/hooks';
+import { useLocalStorage } from 'usehooks-ts';
 
 type LobbyPlayerListProps = {
   gameState: MultiplayerGameWithLobbyState;
@@ -34,6 +35,7 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
   moves,
 }) => {
   const tablet = useMediaQuery('(min-width: 500px)');
+  const [playerName] = useLocalStorage<string>('playerName', '');
 
   return (
     <Stack>
@@ -78,7 +80,7 @@ export const LobbyPlayerList: FC<LobbyPlayerListProps> = ({
               variant="light"
               size={tablet ? 'xs' : 'compact-sm'}
               color={isReady ? 'teal' : 'gray'}
-              onClick={() => moves?.toggleReady()}
+              onClick={() => moves?.toggleReady(player.name)}
               rightSection={
                 isReady ? (
                   <IconCheck size={16} />

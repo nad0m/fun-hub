@@ -13,6 +13,7 @@ import {
   LoveLetterPlayer,
   LoveLetterState,
   playCard,
+  resetGame,
   targetIsProtected,
 } from './utils'
 import {
@@ -31,12 +32,13 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
       G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
     },
     moves: {
-      toggleReady: (G, ctx) => {
+      toggleReady: (G, ctx, name) => {
         G.players[ctx.playerID as string].isReady = !G.players[ctx.playerID as string].isReady
 
         if (!G.players[ctx.playerID as string].isReady) {
           G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
         }
+        G.players[ctx.playerID as string].name = name
       },
       countDownToTransition: G => {
         G.gameStartTimer -= 1
@@ -45,12 +47,23 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
     endIf: G => {
       return G.gameStartTimer === 0
     },
+    onEnd: resetGame,
     start: true,
     next: CommonGamePhases.PlayPhase,
   },
   [CommonGamePhases.PlayPhase]: {
     turn: {
       onBegin: (G, { events, currentPlayer }) => {
+        const players = Object.values(G.players)
+        // end phase if only one person is active
+        const activePlayers = players.filter(({ isActive }) => isActive)
+
+        if (activePlayers.length === 1) {
+          broadcastMessage(G, `${activePlayers[0].name} won the round! Rematch?`)
+          events?.endPhase()
+          return
+        }
+
         const player = getPlayer(G, currentPlayer)
 
         if (!player.isActive) {
@@ -301,15 +314,21 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
         },
       },
     },
-
-    endIf: () => {
-      // const players = Object.values(G.players)
-      // // end phase if every player has drawn their cards
-      // return (
-      //   players.length === playOrder.length &&
-      //   players.every(({ hand }) => hand.length === 1)
-      // )
+    next: CommonGamePhases.WinPhase,
+  },
+  [CommonGamePhases.WinPhase]: {
+    moves: {
+      restart: (G, { playerID }) => {
+        getPlayer(G, playerID as string).isReady = true
+      },
     },
+
+    endIf: G => {
+      const players = Object.values(G.players)
+      return players.every(({ isReady }) => isReady)
+    },
+    onEnd: resetGame,
+    next: CommonGamePhases.PlayPhase,
   },
 }
 
@@ -322,11 +341,11 @@ export const LoveLetter: Game<LoveLetterState> = {
     playOrder.forEach((playerId, idx) => {
       players[playerId] = {
         id: playerId,
-        name: `Player ${idx}`,
-        target: null,
-        hand: [deck.pop() as Card],
-        discard: [],
         isReady: false,
+        name: `Player ${idx + 1}`,
+        hand: [deck.pop() as Card],
+        target: null,
+        discard: [],
         isActive: true,
         isProtected: false,
         priestData: null,
@@ -339,6 +358,7 @@ export const LoveLetter: Game<LoveLetterState> = {
       deck,
       gameStartTimer: 1,
       message: null,
+      winner: null,
     }
   },
   minPlayers: 2,
@@ -347,12 +367,4 @@ export const LoveLetter: Game<LoveLetterState> = {
   turn: {
     activePlayers: ActivePlayers.ALL,
   },
-  // plugins: [
-  //   {
-  //     name: "gameEngine",
-  //     api: ({ ctx }) => {
-  //       return new GameEngine(ctx)
-  //     }
-  //   }
-  // ]
 }

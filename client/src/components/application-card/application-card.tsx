@@ -64,7 +64,6 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           zIndex={1000}
           overlayProps={{ radius: 'sm', blur: 2 }}
         />
-        {/* ...other content */}
         <Stack gap={24}>
           <Box m={0} w="100%">
             <Image src={game.thumbnail} alt={game.title} w="100%" h={120} />

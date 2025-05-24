@@ -1,3 +1,4 @@
+import { Ctx } from 'boardgame.io'
 import { MultiplayerGamePlayer, MultiplayerGameWithLobbyState } from '../types'
 
 export type CardName =
@@ -43,6 +44,7 @@ export type LoveLetterPlayer = MultiplayerGamePlayer & {
 export type LoveLetterState = MultiplayerGameWithLobbyState<LoveLetterPlayer> & {
   deck: Card[]
   message: string | null
+  winner: LoveLetterPlayer | null
 }
 
 export type EffectFn = (
@@ -119,4 +121,19 @@ export function findAndRemove(hand: Card[], cardName: string): Card | undefined 
 
 export const targetIsProtected = (G: LoveLetterState, targetId: string) => {
   return getPlayer(G, targetId).isProtected
+}
+
+export const resetGame = (G: LoveLetterState, ctx: Ctx) => {
+  G.deck = createDeck()
+  ctx.playOrder.forEach(playerId => {
+    G.players[playerId].hand = []
+    G.players[playerId].discard = []
+    G.players[playerId].isActive = true
+    G.players[playerId].target = null
+    G.players[playerId].priestData = null
+    G.players[playerId].baronData = null
+    G.players[playerId].isProtected = false
+    G.players[playerId].isReady = false
+    drawCard(G, playerId)
+  })
 }

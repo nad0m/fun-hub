@@ -9,27 +9,36 @@ import {
   Group,
   Indicator,
   Paper,
+  rem,
   SimpleGrid,
   Stack,
   Text,
+  ThemeIcon,
 } from '@mantine/core';
 import {
   LoveLetterState,
   LoveLetterStages,
   StageMoves,
   StageKey,
+  CommonGamePhases,
 } from '@games';
 import { GameBoardPropsWrapper } from 'components';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
 import { ActionMap } from './action-map';
+import {
+  IconCheck,
+  IconCircleCheck,
+  IconCircleDotted,
+  IconCircleX,
+} from '@tabler/icons-react';
 
 export const LoveLetterBoardComponent = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
     const {
       G,
-      ctx: { currentPlayer, activePlayers },
+      ctx: { currentPlayer, activePlayers, phase },
       playerID,
       matchData,
       moves,
@@ -75,12 +84,50 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
           <Text size="sm" c="teal.4" fw={700}>
             {G.message}
           </Text>
-          {(isClientTurn || baronData) && (
+          {(isClientTurn || baronData) &&
+            phase === CommonGamePhases.PlayPhase && (
+              <>
+                <Divider my="xs" />
+                <Center style={{ flexDirection: 'column' }}>
+                  {ActionMap[currentStage](props)}
+                </Center>
+              </>
+            )}
+          {phase === CommonGamePhases.WinPhase && (
             <>
               <Divider my="xs" />
-              <Center style={{ flexDirection: 'column' }}>
-                {ActionMap[currentStage](props)}
-              </Center>
+              <Box display="flex" style={{ alignItems: 'center', gap: 12 }}>
+                <Button
+                  size="xs"
+                  variant="light"
+                  onClick={() => moves.restart()}
+                  rightSection={
+                    clientPlayer.isReady ? (
+                      <IconCheck size={16} />
+                    ) : (
+                      <IconCircleDotted size={16} />
+                    )
+                  }
+                >
+                  End turn
+                </Button>
+                {matchData?.map(({ id }) => {
+                  const isReady = G.players[id].isReady;
+                  return isReady ? (
+                    <ThemeIcon color="teal" size={26} radius="xl">
+                      <IconCircleCheck
+                        style={{ width: rem(16), height: rem(16) }}
+                      />
+                    </ThemeIcon>
+                  ) : (
+                    <ThemeIcon color="red" size={26} radius="xl">
+                      <IconCircleX
+                        style={{ width: rem(16), height: rem(16) }}
+                      />
+                    </ThemeIcon>
+                  );
+                })}
+              </Box>
             </>
           )}
         </Card>
