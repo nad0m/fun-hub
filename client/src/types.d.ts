@@ -8,6 +8,7 @@ export type GameConfig = {
   thumbnail: string;
   minPlayers: number;
   maxPlayers: number;
+  active: boolean;
 };
 
 export type FunHubBoardProps<GameState> = BoardProps<GameState> & {

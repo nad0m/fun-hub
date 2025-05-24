@@ -8,5 +8,5 @@ export const TicTacToeClient = Client({
   game: TicTacToe,
   board: TicTacToeBoard,
   multiplayer: SocketIO({ server: SERVER_URL }),
-  debug: true,
+  debug: false,
 });

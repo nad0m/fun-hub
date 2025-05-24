@@ -7,12 +7,12 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
   LoveLetter: {
     id: 'LoveLetter',
     title: 'Love Letter',
-    description:
-      'Meld minds with your fellow players to play cards in order without talking.',
+    description: 'Game of risk, deduction, and luck.',
     path: '/loveletter',
     thumbnail: loveletter,
     minPlayers: 2,
     maxPlayers: 4,
+    active: true,
   },
   TicTacToe: {
     id: 'TicTacToe',
@@ -22,6 +22,7 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     thumbnail: tictactoe,
     minPlayers: 2,
     maxPlayers: 2,
+    active: true,
   },
   TheMind: {
     id: 'TheMind',
@@ -32,5 +33,6 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     thumbnail: themind,
     minPlayers: 2,
     maxPlayers: 10,
+    active: false,
   },
 };

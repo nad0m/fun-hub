@@ -140,8 +140,13 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           {game.description}
         </Text>
         <Card.Section className={classes.footer}>
-          <Button fullWidth variant="light" onClick={open}>
-            Play
+          <Button
+            fullWidth
+            variant="light"
+            onClick={open}
+            disabled={!game.active}
+          >
+            {game.active ? 'Play' : 'Coming soon...'}
           </Button>
         </Card.Section>
       </Card>
