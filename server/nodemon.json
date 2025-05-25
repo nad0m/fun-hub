@@ -1,8 +1,5 @@
 {
-  "watch": [
-    "src/**",
-    "../games/src/**"
-  ],
+  "watch": ["src/**", "../games/src/**"],
   "ext": "ts,json",
   "inspect": true,
   "verbose": true,

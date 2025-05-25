@@ -2,7 +2,11 @@
 
 import { TicTacToe, TheMind, LoveLetter } from '../../games/src';
 import { Origins, Server } from 'boardgame.io/server';
+import koaBody from 'koa-body';
 import { bodyParser } from '@koa/bodyparser';
+import { LobbyAPI, StorageAPI } from 'boardgame.io';
+import { getFirstAvailablePlayerID, getNumPlayers } from './utils';
+import { logJoinEvent } from './db';
 
 const server = Server({
   games: [TicTacToe, TheMind, LoveLetter],
@@ -11,6 +15,75 @@ const server = Server({
     Origins.LOCALHOST_IN_DEVELOPMENT,
     'https://nad0m.github.io',
   ],
+});
+
+/**
+ * Join a given match.
+ *
+ * @param {string} name - The name of the game.
+ * @param {string} id - The ID of the match.
+ * @param {string} playerID - The ID of the player who joins. If not sent, will be assigned to the first index available.
+ * @param {string} playerName - The name of the player who joins.
+ * @param {object} data - The default data of the player in the match.
+ * @return - Player ID and credentials to use when interacting in the joined match.
+ */
+server.router.post('/games/:name/:id/join', koaBody(), async (ctx) => {
+  let playerID = ctx.request.body.playerID;
+  const playerName = ctx.request.body.playerName;
+  const data = ctx.request.body.data;
+  const matchID = ctx.params.id;
+  const gameName = ctx.params.name;
+
+  if (!playerName) {
+    ctx.throw(403, 'playerName is required');
+  }
+
+  const { metadata } = await (server.db as StorageAPI.Async).fetch(matchID, {
+    metadata: true,
+  });
+  if (!metadata) {
+    ctx.throw(404, 'Match ' + matchID + ' not found');
+  }
+
+  if (typeof playerID === 'undefined' || playerID === null) {
+    playerID = getFirstAvailablePlayerID(metadata.players);
+    if (playerID === undefined) {
+      const numPlayers = getNumPlayers(metadata.players);
+      ctx.throw(
+        409,
+        `Match ${matchID} reached maximum number of players (${numPlayers})`
+      );
+    }
+  }
+
+  if (!metadata.players[playerID]) {
+    ctx.throw(404, 'Player ' + playerID + ' not found');
+  }
+  if (metadata.players[playerID].name) {
+    ctx.throw(409, 'Player ' + playerID + ' not available');
+  }
+
+  if (data) {
+    metadata.players[playerID].data = data;
+  }
+  metadata.players[playerID].name = playerName;
+  const playerCredentials = await server.auth.generateCredentials(ctx);
+  metadata.players[playerID].credentials = playerCredentials;
+
+  await server.db.setMetadata(matchID, metadata);
+
+  const body: LobbyAPI.JoinedMatch = { playerID, playerCredentials };
+  ctx.body = body;
+
+  logJoinEvent({
+    playerID,
+    playerName,
+    matchID,
+    gameName,
+    playerCredentials,
+  }).catch((e) => {
+    console.error('Error inserting log', e);
+  });
 });
 
 server.router.post('/force-play', bodyParser(), async (ctx) => {
