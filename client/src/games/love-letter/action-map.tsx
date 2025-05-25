@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
   Center,
   Divider,
   Group,
@@ -25,6 +26,10 @@ export const ActionMap: Record<
     const currentPlayer = ctx.currentPlayer;
     const clientPlayer = G.players[currentPlayer];
 
+    const hasCountess = clientPlayer.hand.some(
+      ({ name }) => name === 'Countess'
+    );
+
     return (
       <Center style={{ gap: 8, flexDirection: 'column' }}>
         <Text size="sm" fw={700} c="yellow">
@@ -32,11 +37,14 @@ export const ActionMap: Record<
         </Text>
         <Group>
           {clientPlayer.hand.map((card, idx) => {
+            const disabled =
+              (card.name === 'Prince' || card.name === 'King') && hasCountess;
             return (
               <Button
                 key={idx}
                 size="xs"
                 variant="light"
+                disabled={disabled}
                 onClick={() => moves.stageCard(card.name)}
               >
                 [{card.value}] {card.name}
@@ -206,6 +214,7 @@ export const ActionMap: Record<
     const targetId = G.players[currentPlayer].target;
     const player = G.players[currentPlayer];
     const target = G.players[targetId as string];
+    const players = [player, target];
 
     return (
       <Box
@@ -222,36 +231,28 @@ export const ActionMap: Record<
           }
           centered
         >
-          <Center style={{ justifyContent: 'space-between' }}>
-            <Center style={{ flexDirection: 'column', gap: 8 }}>
-              <Text size="sm" fw={700} c="yellow">
-                {target.name}'s hand:
-              </Text>
-              {target.hand.map((card, idx) => (
-                <Avatar
-                  key={idx}
-                  src={getCardImage(card.name)}
-                  radius="md"
-                  size="xl"
-                  style={{ height: '114px' }}
-                />
-              ))}
-            </Center>
-            <Center style={{ flexDirection: 'column', gap: 8 }}>
-              <Text size="sm" fw={700} c="yellow">
-                {player.name}'s hand:
-              </Text>
-              {player.hand.map((card, idx) => (
-                <Avatar
-                  key={idx}
-                  src={getCardImage(card.name)}
-                  radius="md"
-                  size="xl"
-                  style={{ height: '114px' }}
-                />
-              ))}
-            </Center>
-          </Center>
+          <SimpleGrid cols={2}>
+            {players.map(({ name, hand }, idx) => {
+              return (
+                <Center style={{ flexDirection: 'column' }}>
+                  <Text size="sm" fw={700} c="yellow">
+                    {name}'s hand:
+                  </Text>
+                  <Card key={idx} p="xs">
+                    {hand.map((card, idx) => (
+                      <Avatar
+                        key={idx}
+                        src={getCardImage(card.name)}
+                        radius="md"
+                        size="xl"
+                        style={{ height: '114px' }}
+                      />
+                    ))}
+                  </Card>
+                </Center>
+              );
+            })}
+          </SimpleGrid>
           <Box display="flex" style={{ justifyContent: 'center' }}></Box>
         </Modal>
         <Button size="xs" variant="light" onClick={open}>
@@ -269,6 +270,7 @@ export const ActionMap: Record<
     const targetId = G.players[currentPlayer].target;
     const player = G.players[currentPlayer];
     const target = G.players[targetId as string];
+    const players = [player, target];
 
     return (
       <Box
@@ -280,41 +282,33 @@ export const ActionMap: Record<
           onClose={close}
           title={
             <Text size="sm" fw={700} c="teal">
-              Comparing hands
+              Comparing hands:
             </Text>
           }
           centered
         >
-          <Center style={{ justifyContent: 'space-between' }}>
-            <Center style={{ flexDirection: 'column', gap: 8 }}>
-              <Text size="sm" fw={700} c="yellow">
-                {target.name}'s hand:
-              </Text>
-              {target.hand.map((card, idx) => (
-                <Avatar
-                  key={idx}
-                  src={getCardImage(card.name)}
-                  radius="md"
-                  size="xl"
-                  style={{ height: '114px' }}
-                />
-              ))}
-            </Center>
-            <Center style={{ flexDirection: 'column', gap: 8 }}>
-              <Text size="sm" fw={700} c="yellow">
-                {player.name}'s hand:
-              </Text>
-              {player.hand.map((card, idx) => (
-                <Avatar
-                  key={idx}
-                  src={getCardImage(card.name)}
-                  radius="md"
-                  size="xl"
-                  style={{ height: '114px' }}
-                />
-              ))}
-            </Center>
-          </Center>
+          <SimpleGrid cols={2}>
+            {players.map(({ name, hand }, idx) => {
+              return (
+                <Center style={{ flexDirection: 'column' }}>
+                  <Text size="sm" fw={700} c="yellow">
+                    {name}'s hand:
+                  </Text>
+                  <Card key={idx} p="xs">
+                    {hand.map((card, idx) => (
+                      <Avatar
+                        key={idx}
+                        src={getCardImage(card.name)}
+                        radius="md"
+                        size="xl"
+                        style={{ height: '114px' }}
+                      />
+                    ))}
+                  </Card>
+                </Center>
+              );
+            })}
+          </SimpleGrid>
           <Box display="flex" style={{ justifyContent: 'center' }}></Box>
         </Modal>
         <Button size="xs" variant="light" onClick={open}>

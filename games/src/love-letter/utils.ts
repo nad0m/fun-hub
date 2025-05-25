@@ -137,3 +137,22 @@ export const resetGame = (G: LoveLetterState, ctx: Ctx) => {
     drawCard(G, playerId)
   })
 }
+
+export const getHighestHand = (G: LoveLetterState) => {
+  const activePlayers = Object.values(G.players).filter(({ isActive }) => isActive)
+
+  let winner = activePlayers[0]
+  const isTie = activePlayers.every(({ hand }) => hand[0].value === winner.hand[0].value)
+
+  if (isTie) {
+    return `Game tied!`
+  }
+
+  activePlayers.forEach(player => {
+    if (player.hand[0].value > winner.hand[0].value) {
+      winner = player
+    }
+  })
+
+  return `${winner.name} wins with the highest card in hand!`
+}

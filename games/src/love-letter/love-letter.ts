@@ -8,6 +8,7 @@ import {
   checkTargets,
   createDeck,
   drawCard,
+  getHighestHand,
   getPlayer,
   getPlayerName,
   LoveLetterPlayer,
@@ -55,7 +56,6 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
     turn: {
       onBegin: (G, { events, currentPlayer }) => {
         const players = Object.values(G.players)
-        // end phase if only one person is active
         const activePlayers = players.filter(({ isActive }) => isActive)
 
         if (activePlayers.length === 1) {
@@ -68,6 +68,13 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
 
         if (!player.isActive) {
           events?.endTurn()
+          return
+        }
+
+        if (G.deck.length === 0) {
+          const message = getHighestHand(G)
+          broadcastMessage(G, `No more cards in the deck.\n${message}`)
+          events?.endPhase()
           return
         }
 

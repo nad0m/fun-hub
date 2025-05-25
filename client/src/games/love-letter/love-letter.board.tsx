@@ -22,7 +22,7 @@ import {
   StageKey,
   CommonGamePhases,
 } from '@games';
-import { GameBoardPropsWrapper } from 'components';
+import { GameBoardPropsWrapper, LoveLetterShowHands } from 'components';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
@@ -42,13 +42,14 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
       playerID,
       matchData,
       moves,
-      log,
-      gameConfig,
     } = props;
 
     const baronData = G.players[playerID as string]?.baronData;
     const players = Object.values(G.players).filter(
       ({ id }) => id !== playerID
+    );
+    const playersStillActive = Object.values(G.players).filter(
+      ({ isActive }) => isActive
     );
     const clientPlayer = G.players[playerID || ''];
     const isClientTurn = currentPlayer === playerID;
@@ -96,38 +97,55 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
           {phase === CommonGamePhases.WinPhase && (
             <>
               <Divider my="xs" />
-              <Box display="flex" style={{ alignItems: 'center', gap: 12 }}>
-                <Button
-                  size="xs"
-                  variant="light"
-                  onClick={() => moves.restart()}
-                  rightSection={
-                    clientPlayer.isReady ? (
-                      <IconCheck size={16} />
-                    ) : (
-                      <IconCircleDotted size={16} />
-                    )
-                  }
+              <Group justify="space-between">
+                <Box
+                  display="flex"
+                  style={{
+                    alignItems: 'center',
+                    gap: 12,
+                  }}
                 >
-                  End turn
-                </Button>
-                {matchData?.map(({ id }) => {
-                  const isReady = G.players[id].isReady;
-                  return isReady ? (
-                    <ThemeIcon color="teal" size={26} radius="xl">
-                      <IconCircleCheck
-                        style={{ width: rem(16), height: rem(16) }}
-                      />
-                    </ThemeIcon>
-                  ) : (
-                    <ThemeIcon color="red" size={26} radius="xl">
-                      <IconCircleX
-                        style={{ width: rem(16), height: rem(16) }}
-                      />
-                    </ThemeIcon>
-                  );
-                })}
-              </Box>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    onClick={() => moves.restart()}
+                    rightSection={
+                      clientPlayer.isReady ? (
+                        <IconCheck size={16} />
+                      ) : (
+                        <IconCircleDotted size={16} />
+                      )
+                    }
+                  >
+                    Rematch
+                  </Button>
+                  {matchData?.map(({ id }) => {
+                    const isReady = G.players[id].isReady;
+                    return isReady ? (
+                      <ThemeIcon key={id} color="teal" size={26} radius="xl">
+                        <IconCircleCheck
+                          style={{ width: rem(16), height: rem(16) }}
+                        />
+                      </ThemeIcon>
+                    ) : (
+                      <ThemeIcon key={id} color="red" size={26} radius="xl">
+                        <IconCircleX
+                          style={{ width: rem(16), height: rem(16) }}
+                        />
+                      </ThemeIcon>
+                    );
+                  })}
+                </Box>
+                <LoveLetterShowHands
+                  players={playersStillActive}
+                  defaultOpened={G.deck.length === 0}
+                  subtitle={
+                    G.deck.length === 0
+                      ? 'No cards left in deck. Comparing hands:'
+                      : "Winner's hand:"
+                  }
+                />
+              </Group>
             </>
           )}
         </Card>
