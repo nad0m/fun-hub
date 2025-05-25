@@ -33,7 +33,10 @@ export const PlayerRegister: FC<PlayerRegisterProps> = ({
     <Modal
       opened={opened}
       withCloseButton={false}
-      onClose={close}
+      onClose={() => {
+        form.setValues({ playerName });
+        close();
+      }}
       title={
         <Text
           inherit
