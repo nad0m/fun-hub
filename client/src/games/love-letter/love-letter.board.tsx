@@ -1,27 +1,5 @@
-import {
-  Blockquote,
-  Box,
-  Button,
-  Card,
-  Center,
-  Container,
-  Divider,
-  Group,
-  Indicator,
-  Paper,
-  rem,
-  SimpleGrid,
-  Stack,
-  Text,
-  ThemeIcon,
-} from '@mantine/core';
-import {
-  LoveLetterState,
-  LoveLetterStages,
-  StageMoves,
-  StageKey,
-  CommonGamePhases,
-} from '@games';
+import { Box, Card, Center, Divider, Group, Stack, Text } from '@mantine/core';
+import { LoveLetterState, StageKey, CommonGamePhases } from '@games';
 import {
   GameBoardPropsWrapper,
   LoveLetterShowHands,
@@ -31,12 +9,6 @@ import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
 import { ActionMap } from './action-map';
-import {
-  IconCheck,
-  IconCircleCheck,
-  IconCircleDotted,
-  IconCircleX,
-} from '@tabler/icons-react';
 
 export const LoveLetterBoardComponent = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
@@ -103,7 +75,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
               <Divider my="xs" />
               <Group justify="space-between">
                 <RematchVote
-                  onClick={moves.restart}
+                  onClick={() => moves.restart()}
                   matchData={matchData}
                   isReady={clientPlayer?.isReady}
                   players={G.players}
