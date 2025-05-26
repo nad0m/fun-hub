@@ -5,7 +5,6 @@ import { Avatar, Box, Card, Center, Text } from '@mantine/core';
 import './styles.css';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { GameBoardPropsWrapper, RematchVote } from 'components';
-import { IconCircleCheck } from '@tabler/icons-react';
 
 const ROWS = 6;
 const COLS = 7;
@@ -24,7 +23,7 @@ export const ConnectFourComponent = (
     null
   );
   const boardRef = useRef<HTMLDivElement | null>(null);
-  const { board, winner, winningCoords, draw, players } = G;
+  const { board, winner, winningCoords, draw, players, recentPiece } = G;
   const { currentPlayer, phase } = ctx;
   const clientPlayer = players[playerID as string];
 
@@ -48,9 +47,12 @@ export const ConnectFourComponent = (
         if (prevBoard[row][col] === null && G.board[row][col] !== null) {
           const newPiece = { row, col, player: G.board[row][col] as string };
           setAnimatingPiece(newPiece);
-          setTimeout(() => {
-            setAnimatingPiece(null);
-          }, 300);
+          setTimeout(
+            () => {
+              setAnimatingPiece(null);
+            },
+            (row + 1) * 100
+          );
           prevBoardRef.current = JSON.parse(JSON.stringify(G.board));
           return;
         }
@@ -65,12 +67,24 @@ export const ConnectFourComponent = (
     if (value === '0') className += ' blue';
     else if (value === '1') className += ' red';
 
-    const highlight = winningCoords?.some(([r, c]) => {
+    const winnerPiece = winningCoords?.some(([r, c]) => {
       return r === row && c === col;
     });
 
-    if (highlight) className += ' highlight';
-    return <Center key={`${row}-${col}`} className={className} />;
+    if (winnerPiece) className += ' highlight';
+
+    const timing = (row + 1) * 100;
+    const winningCoordTiming =
+      winnerPiece && recentPiece ? (recentPiece[0] + 1) * 100 : 600;
+    return (
+      <Center
+        key={`${row}-${col}`}
+        className={className}
+        style={{
+          transition: `background ${timing}ms step-end, border ${winningCoordTiming}ms step-end`,
+        }}
+      />
+    );
   };
 
   return (
@@ -113,7 +127,7 @@ export const ConnectFourComponent = (
                   boardRef.current.clientWidth / COLS / 2 -
                   (boardRef.current.clientWidth / COLS) * 0.4
                 }px`,
-                animation: `drop-${animatingPiece.row} 0.3s ease-in`,
+                animation: `drop-${animatingPiece.row} 0.${animatingPiece.row + 1}s ease-in`,
               }}
             />
           )}

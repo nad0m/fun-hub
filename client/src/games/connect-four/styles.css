@@ -27,10 +27,7 @@
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition:
-    background 300ms step-end,
-    border 300ms step-end;
+  border: 2px solid gray;
 }
 
 .cell.red {
