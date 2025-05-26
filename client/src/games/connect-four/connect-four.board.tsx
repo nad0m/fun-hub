@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { CommonGamePhases, ConnectFourState } from '@games';
 import { FunHubBoardProps } from 'types';
-import { Box, Card, Center, Text } from '@mantine/core';
+import { Avatar, Box, Card, Center, Text } from '@mantine/core';
 import './styles.css';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { GameBoardPropsWrapper, RematchVote } from 'components';
-import { IconStar } from '@tabler/icons-react';
+import { IconCircleCheck } from '@tabler/icons-react';
 
 const ROWS = 6;
 const COLS = 7;
@@ -19,13 +19,13 @@ type AnimatingPiece = {
 export const ConnectFourComponent = (
   props: FunHubBoardProps<ConnectFourState>
 ) => {
-  const { G, ctx, moves, isActive, matchData } = props;
+  const { G, ctx, moves, isActive, matchData, playerID } = props;
   const [animatingPiece, setAnimatingPiece] = useState<AnimatingPiece | null>(
     null
   );
   const boardRef = useRef<HTMLDivElement | null>(null);
-  const { board, winner, winningCoords, draw, players, recentPiece } = G;
-  const { currentPlayer, phase, playerID } = ctx;
+  const { board, winner, winningCoords, draw, players } = G;
+  const { currentPlayer, phase } = ctx;
   const clientPlayer = players[playerID as string];
 
   const handleClick = (col: number) => {
@@ -62,7 +62,7 @@ export const ConnectFourComponent = (
   const renderCell = (row: number, col: number) => {
     const value = board[row][col];
     let className = 'cell';
-    if (value === '0') className += ' yellow';
+    if (value === '0') className += ' blue';
     else if (value === '1') className += ' red';
 
     const highlight = winningCoords?.some(([r, c]) => {
@@ -71,7 +71,9 @@ export const ConnectFourComponent = (
 
     return (
       <Center key={`${row}-${col}`} className={className}>
-        {highlight && !animatingPiece && <IconStar color="lime" />}
+        {highlight && !animatingPiece && (
+          <IconCircleCheck color="lime" size={16} />
+        )}
       </Center>
     );
   };
@@ -91,7 +93,7 @@ export const ConnectFourComponent = (
           </Text>
         )}
       </Center>
-      <Card p="md" bg="#242424" maw={550} m="auto" withBorder>
+      <Card p="md" bg="#242424" maw={500} m="auto" radius="lg" withBorder>
         <Box className="board" ref={boardRef}>
           {board.map((row, rowIndex) => (
             <Box key={rowIndex} className="row">
@@ -108,7 +110,7 @@ export const ConnectFourComponent = (
           ))}
           {animatingPiece && boardRef.current && (
             <Box
-              className={`piece ${animatingPiece.player === '0' ? 'yellow' : 'red'}`}
+              className={`piece ${animatingPiece.player === '0' ? 'blue' : 'red'}`}
               style={{
                 top: 0,
                 left: `${
@@ -122,7 +124,8 @@ export const ConnectFourComponent = (
           )}
         </Box>
       </Card>
-      {phase === CommonGamePhases.WinPhase && (
+
+      {phase === CommonGamePhases.WinPhase ? (
         <Center my="md">
           <RematchVote
             onClick={() => moves.restart()}
@@ -130,6 +133,18 @@ export const ConnectFourComponent = (
             isReady={clientPlayer?.isReady}
             players={players}
           />
+        </Center>
+      ) : (
+        <Center m="md" style={{ flexDirection: 'column' }}>
+          <Avatar
+            size="md"
+            style={{
+              background: playerID === '0' ? 'rgb(0, 52, 182)' : '#e03131',
+            }}
+          />
+          <Text size="xs" fw={700}>
+            {clientPlayer.name}
+          </Text>
         </Center>
       )}
     </Box>

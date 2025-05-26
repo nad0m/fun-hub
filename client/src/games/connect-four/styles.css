@@ -34,8 +34,8 @@
   background: #e03131;
 }
 
-.cell.yellow {
-  background: rgb(255, 255, 113);
+.cell.blue {
+  background: rgb(0, 52, 182);
 }
 
 .piece {
@@ -50,8 +50,8 @@
   background: #e03131;
 }
 
-.piece.yellow {
-  background: rgb(255, 255, 113);
+.piece.blue {
+  background: rgb(0, 52, 182);
 }
 
 @keyframes drop-0 {
