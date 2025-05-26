@@ -114,7 +114,7 @@ export const ConnectFourComponent = (
                 left: `${
                   (boardRef.current.clientWidth / COLS) * animatingPiece.col +
                   boardRef.current.clientWidth / COLS / 2 -
-                  (boardRef.current.clientWidth / COLS) * 0.45
+                  (boardRef.current.clientWidth / COLS) * 0.4
                 }px`,
                 animation: `drop-${animatingPiece.row} 0.5s ease-in forwards`,
               }}
