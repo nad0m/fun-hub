@@ -94,20 +94,20 @@ export const ConnectFourComponent = (
       <Card p="md" bg="#242424" maw={550} m="auto" withBorder>
         <Box className="board" ref={boardRef}>
           {board.map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
+            <Box key={rowIndex} className="row">
               {row.map((_, colIndex) => (
-                <div
+                <Box
                   key={colIndex}
                   className="column"
                   onClick={() => handleClick(colIndex)}
                 >
                   {renderCell(rowIndex, colIndex)}
-                </div>
+                </Box>
               ))}
-            </div>
+            </Box>
           ))}
           {animatingPiece && boardRef.current && (
-            <div
+            <Box
               className={`piece ${animatingPiece.player === '0' ? 'yellow' : 'red'}`}
               style={{
                 top: 0,
