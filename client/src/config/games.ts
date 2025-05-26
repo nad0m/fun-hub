@@ -2,6 +2,7 @@ import { GameConfig } from 'types';
 import tictactoe from '../assets/app/tictactoe.jpeg';
 import themind from '../assets/app/themind.jpeg';
 import loveletter from '../assets/app/loveletters.webp';
+import connectfour from '../assets/app/connect-four.png';
 
 export const GAMES_GLOSSARY: Record<string, GameConfig> = {
   LoveLetter: {
@@ -12,6 +13,16 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     thumbnail: loveletter,
     minPlayers: 2,
     maxPlayers: 4,
+    active: true,
+  },
+  ConnectFour: {
+    id: 'ConnectFour',
+    title: 'Connect Four',
+    description: 'Go head-to-head in a battle to own the grid.',
+    path: '/connectfour',
+    thumbnail: connectfour,
+    minPlayers: 2,
+    maxPlayers: 2,
     active: true,
   },
   TicTacToe: {

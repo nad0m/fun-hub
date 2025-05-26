@@ -4,6 +4,7 @@ import { GamePage } from 'pages/game.page';
 import { HomePage } from 'pages/home.page';
 import { GAMES_GLOSSARY } from 'config/games';
 import { LoveLetterClient } from 'games/love-letter';
+import { ConnectFourClient } from 'games/connect-four';
 
 export function Router() {
   return (
@@ -37,6 +38,15 @@ export function Router() {
           <GamePage
             gameConfig={GAMES_GLOSSARY.LoveLetter}
             GameClientComponent={LoveLetterClient}
+          />
+        }
+      />
+      <Route
+        path={`${GAMES_GLOSSARY.ConnectFour.path}/:matchID`}
+        element={
+          <GamePage
+            gameConfig={GAMES_GLOSSARY.ConnectFour}
+            GameClientComponent={ConnectFourClient}
           />
         }
       />

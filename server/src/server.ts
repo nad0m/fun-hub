@@ -1,6 +1,6 @@
 // server.ts
 
-import { TicTacToe, TheMind, LoveLetter } from '../../games/src';
+import { TicTacToe, TheMind, LoveLetter, ConnectFour } from '../../games/src';
 import { Origins, Server } from 'boardgame.io/server';
 import koaBody from 'koa-body';
 import { bodyParser } from '@koa/bodyparser';
@@ -9,7 +9,7 @@ import { getFirstAvailablePlayerID, getNumPlayers } from './utils';
 import { logJoinEvent } from './db';
 
 const server = Server({
-  games: [TicTacToe, TheMind, LoveLetter],
+  games: [TicTacToe, TheMind, LoveLetter, ConnectFour],
   origins: [
     // Allow localhost to connect, except when NODE_ENV is 'production'.
     Origins.LOCALHOST_IN_DEVELOPMENT,

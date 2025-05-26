@@ -9,3 +9,4 @@ export * from './player-register';
 export * from './utilities/game-board-wrapper';
 export * from './edit-name-toggle';
 export * from './love-letter-show-hands';
+export * from './rematch-vote';
