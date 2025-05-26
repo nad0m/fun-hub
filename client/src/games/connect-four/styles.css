@@ -27,7 +27,10 @@
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  transition: background 500ms step-end;
+  border: 2px solid transparent;
+  transition:
+    background 300ms step-end,
+    border 300ms step-end;
 }
 
 .cell.red {
@@ -36,6 +39,10 @@
 
 .cell.blue {
   background: rgb(0, 52, 182);
+}
+
+.cell.highlight {
+  border: 2px solid limegreen;
 }
 
 .piece {
@@ -56,31 +63,31 @@
 
 @keyframes drop-0 {
   to {
-    top: calc(0 * 100% / 6);
+    top: calc(0 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-1 {
   to {
-    top: calc(1 * 100% / 6);
+    top: calc(1 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-2 {
   to {
-    top: calc(2 * 100% / 6);
+    top: calc(2 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-3 {
   to {
-    top: calc(3 * 100% / 6);
+    top: calc(3 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-4 {
   to {
-    top: calc(4 * 100% / 6);
+    top: calc(4 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-5 {
   to {
-    top: calc(5 * 100% / 6);
+    top: calc(5 * 100% / 6 + 5px);
   }
 }

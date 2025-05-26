@@ -50,7 +50,7 @@ export const ConnectFourComponent = (
           setAnimatingPiece(newPiece);
           setTimeout(() => {
             setAnimatingPiece(null);
-          }, 500);
+          }, 300);
           prevBoardRef.current = JSON.parse(JSON.stringify(G.board));
           return;
         }
@@ -69,13 +69,8 @@ export const ConnectFourComponent = (
       return r === row && c === col;
     });
 
-    return (
-      <Center key={`${row}-${col}`} className={className}>
-        {highlight && !animatingPiece && (
-          <IconCircleCheck color="lime" size={16} />
-        )}
-      </Center>
-    );
+    if (highlight) className += ' highlight';
+    return <Center key={`${row}-${col}`} className={className} />;
   };
 
   return (
@@ -118,7 +113,7 @@ export const ConnectFourComponent = (
                   boardRef.current.clientWidth / COLS / 2 -
                   (boardRef.current.clientWidth / COLS) * 0.4
                 }px`,
-                animation: `drop-${animatingPiece.row} 0.5s ease-in forwards`,
+                animation: `drop-${animatingPiece.row} 0.3s ease-in`,
               }}
             />
           )}

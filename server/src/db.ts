@@ -5,7 +5,6 @@ import { config } from 'dotenv';
 config();
 const supabaseUrl = `https://${process.env.PROJECT_REF}.supabase.co`;
 const supabaseKey = process.env.SUPABASE_KEY || '';
-const supabase = createClient<Database>(supabaseUrl, supabaseKey);
 
 type Log = {
   playerName: string;
@@ -16,9 +15,15 @@ type Log = {
 };
 
 export const logJoinEvent = async (log: Log) => {
-  const table = process.env.NODE_ENV === 'production' ? 'join_log_prod' : 'join_log_dev';
+  const table = process.env.NODE_ENV === 'production' ? 'join_log_prod' : null;
+
+  if (!table) {
+    return;
+  }
+
   const { playerName, playerID, matchID, gameName, playerCredentials } = log;
 
+  const supabase = createClient<Database>(supabaseUrl, supabaseKey);
   const { error } = await supabase.from(table).insert({
     player_name: playerName,
     player_id: playerID,
