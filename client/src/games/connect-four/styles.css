@@ -68,6 +68,7 @@
 
   100% {
     top: calc(0 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
 @keyframes drop-1 {

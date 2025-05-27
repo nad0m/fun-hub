@@ -40,9 +40,9 @@ export const ConnectFourComponent = (
 
     if (winnerPiece) className += ' highlight';
 
-    const timing = (row + 1) * 100;
+    const timing = (row + 1) * 80;
     const winningCoordTiming =
-      winnerPiece && recentPiece ? (recentPiece.row + 1) * 100 : 600;
+      winnerPiece && recentPiece ? (recentPiece.row + 1) * 80 : 360;
     return (
       <Center
         key={`${row}-${col}`}
@@ -105,7 +105,7 @@ export const ConnectFourComponent = (
                   (boardRef.current.clientWidth / COLS) * 0.4
                 }px`,
                 opacity: 0,
-                animation: `drop-${recentPiece.row} 0.${recentPiece.row + 1}s ease-in`,
+                animation: `drop-${recentPiece.row} ${(recentPiece.row + 1) * 80}ms ease-in`,
               }}
             />
           )}
