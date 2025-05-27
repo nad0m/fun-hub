@@ -106,7 +106,12 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
               playCard(G, currentPlayer, cardName)
 
               // check for valid targets
-              if (cardName === 'Guard' || cardName === 'Priest' || cardName === 'Baron') {
+              if (
+                cardName === 'Guard' ||
+                cardName === 'Priest' ||
+                cardName === 'Baron' ||
+                cardName === 'King'
+              ) {
                 const hasTargets = checkTargets(G, currentPlayer)
 
                 broadcastMessage(
