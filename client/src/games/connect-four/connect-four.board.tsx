@@ -59,7 +59,7 @@ export const ConnectFourComponent = (
       isAnimating.current = true;
       setTimeout(() => {
         isAnimating.current = false;
-      }, 600);
+      }, 500);
     }
   }, [recentPiece]);
 
@@ -78,7 +78,15 @@ export const ConnectFourComponent = (
           </Text>
         )}
       </Center>
-      <Card p="md" bg="#2e2e2e" maw={500} m="auto" radius="lg" withBorder>
+      <Card
+        className="shadow"
+        p="md"
+        bg="#2e2e2e"
+        maw={500}
+        m="12px auto"
+        radius="lg"
+        withBorder
+      >
         <Box className="board" ref={boardRef}>
           {board.map((row, rowIndex) => (
             <Box key={rowIndex} className="row">
@@ -122,7 +130,7 @@ export const ConnectFourComponent = (
           />
         </Center>
       ) : (
-        <Center m="md" style={{ flexDirection: 'column' }}>
+        <Center style={{ flexDirection: 'column' }}>
           <Avatar
             size="md"
             style={{
