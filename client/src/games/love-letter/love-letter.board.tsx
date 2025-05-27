@@ -1,4 +1,14 @@
-import { Box, Card, Center, Divider, Group, Stack, Text } from '@mantine/core';
+import {
+  Box,
+  Card,
+  Center,
+  Divider,
+  Flex,
+  Group,
+  Paper,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { LoveLetterState, StageKey, CommonGamePhases } from '@games';
 import {
   GameBoardPropsWrapper,
@@ -9,6 +19,7 @@ import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
 import { ActionMap } from './action-map';
+import { IconMathGreater } from '@tabler/icons-react';
 
 export const LoveLetterBoardComponent = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
@@ -58,9 +69,20 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
           mt="md"
           style={{ zIndex: 99, justifyContent: 'center' }}
         >
-          <Text size="sm" c="teal.4" fw={700}>
-            {G.message}
-          </Text>
+          <Paper px="xs" py="xs">
+            <Flex direction="column">
+              {G.message.map((text, idx) => (
+                <Text
+                  key={idx}
+                  size="xs"
+                  c={idx === G.message.length - 1 ? 'red' : 'indigo'}
+                >
+                  {idx === G.message.length - 1 ? '> ' : ''}
+                  {text}
+                </Text>
+              ))}
+            </Flex>
+          </Paper>
           {(isClientTurn || baronData) &&
             phase === CommonGamePhases.PlayPhase && (
               <>

@@ -43,7 +43,7 @@ export type LoveLetterPlayer = MultiplayerGamePlayer & {
 
 export type LoveLetterState = MultiplayerGameWithLobbyState<LoveLetterPlayer> & {
   deck: Card[]
-  message: string | null
+  message: string[]
   winner: LoveLetterPlayer | null
 }
 
@@ -103,7 +103,13 @@ export const checkTargets = (G: LoveLetterState, currentPlayer: string) => {
 }
 
 export const broadcastMessage = (gameState: LoveLetterState, message: string) => {
-  gameState.message = message
+  const result = [...gameState.message, message]
+
+  if (result.length > 5) {
+    result.splice(0, result.length - 5)
+  }
+
+  gameState.message = result
 }
 
 export const getPlayerName = (gameState: LoveLetterState, id: string) =>

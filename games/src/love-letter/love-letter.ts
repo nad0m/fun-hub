@@ -368,7 +368,7 @@ export const LoveLetter: Game<LoveLetterState> = {
       players,
       deck,
       gameStartTimer: GAME_START_COUNTDOWN_SECONDS,
-      message: null,
+      message: [],
       winner: null,
     }
   },
