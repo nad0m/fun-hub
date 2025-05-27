@@ -25,7 +25,11 @@ export type ConnectFourState = MultiplayerGameWithLobbyState<ConnectFourPlayer> 
   winner: string
   winningCoords: Coordinate[] | null
   draw: boolean
-  recentPiece: [number, number] | null
+  recentPiece: {
+    row: number
+    col: number
+    playerId: string
+  } | null
 }
 
 function createEmptyBoard(): Board {
@@ -128,7 +132,11 @@ export const ConnectFour: Game<ConnectFourState> = {
           for (let row = ROWS - 1; row >= 0; row--) {
             if (G.board[row][col] === null) {
               G.board[row][col] = ctx.currentPlayer as PlayerID
-              G.recentPiece = [row, col]
+              G.recentPiece = {
+                row,
+                col,
+                playerId: ctx.currentPlayer,
+              }
               return
             }
           }

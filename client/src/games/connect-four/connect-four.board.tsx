@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { CommonGamePhases, ConnectFourState } from '@games';
 import { FunHubBoardProps } from 'types';
 import { Avatar, Box, Card, Center, Text } from '@mantine/core';
@@ -6,13 +6,12 @@ import './styles.css';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { GameBoardPropsWrapper, RematchVote } from 'components';
 
-const ROWS = 6;
 const COLS = 7;
 
 type AnimatingPiece = {
   row: number;
   col: number;
-  player: string;
+  playerId: string;
 };
 
 export const ConnectFourComponent = (
@@ -37,30 +36,6 @@ export const ConnectFourComponent = (
     moves.dropPiece(col);
   };
 
-  const prevBoardRef = useRef(JSON.parse(JSON.stringify(G.board)));
-
-  useEffect(() => {
-    const prevBoard = prevBoardRef.current;
-
-    for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS; col++) {
-        if (prevBoard[row][col] === null && G.board[row][col] !== null) {
-          const newPiece = { row, col, player: G.board[row][col] as string };
-          setAnimatingPiece(newPiece);
-          setTimeout(
-            () => {
-              setAnimatingPiece(null);
-            },
-            (row + 1) * 100
-          );
-          prevBoardRef.current = JSON.parse(JSON.stringify(G.board));
-          return;
-        }
-      }
-    }
-    prevBoardRef.current = JSON.parse(JSON.stringify(G.board));
-  }, [G.board]);
-
   const renderCell = (row: number, col: number) => {
     const value = board[row][col];
     let className = 'cell';
@@ -75,7 +50,7 @@ export const ConnectFourComponent = (
 
     const timing = (row + 1) * 100;
     const winningCoordTiming =
-      winnerPiece && recentPiece ? (recentPiece[0] + 1) * 100 : 600;
+      winnerPiece && recentPiece ? (recentPiece.row + 1) * 100 : 600;
     return (
       <Center
         key={`${row}-${col}`}
@@ -102,7 +77,7 @@ export const ConnectFourComponent = (
           </Text>
         )}
       </Center>
-      <Card p="md" bg="#242424" maw={500} m="auto" radius="lg" withBorder>
+      <Card p="md" bg="#2e2e2e" maw={500} m="auto" radius="lg" withBorder>
         <Box className="board" ref={boardRef}>
           {board.map((row, rowIndex) => (
             <Box key={rowIndex} className="row">
@@ -117,17 +92,19 @@ export const ConnectFourComponent = (
               ))}
             </Box>
           ))}
-          {animatingPiece && boardRef.current && (
+          {recentPiece && boardRef.current && (
             <Box
-              className={`piece ${animatingPiece.player === '0' ? 'blue' : 'red'}`}
+              key={`${recentPiece.row}-${recentPiece.col}-${recentPiece.playerId}`}
+              className={`piece ${recentPiece.playerId === '0' ? 'blue' : 'red'}`}
               style={{
-                top: 0,
+                top: -10,
                 left: `${
-                  (boardRef.current.clientWidth / COLS) * animatingPiece.col +
+                  (boardRef.current.clientWidth / COLS) * recentPiece.col +
                   boardRef.current.clientWidth / COLS / 2 -
                   (boardRef.current.clientWidth / COLS) * 0.4
                 }px`,
-                animation: `drop-${animatingPiece.row} 0.${animatingPiece.row + 1}s ease-in`,
+                opacity: 0,
+                animation: `drop-${recentPiece.row} 0.${recentPiece.row + 1}s ease-in`,
               }}
             />
           )}

@@ -5,7 +5,7 @@
   aspect-ratio: 7 / 6;
   position: relative;
   margin: auto;
-  background: #242424;
+  background: #2e2e2e;
   padding: 0;
 }
 
@@ -27,7 +27,10 @@
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-  border: 2px solid gray;
+  border: 2px solid transparent;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.49) inset;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.49) inset;
+  -moz-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.49) inset;
 }
 
 .cell.red {
@@ -59,32 +62,56 @@
 }
 
 @keyframes drop-0 {
-  to {
+  1% {
+    opacity: 1;
+  }
+
+  100% {
     top: calc(0 * 100% / 6 + 5px);
   }
 }
 @keyframes drop-1 {
-  to {
+  1% {
+    opacity: 1;
+  }
+  100% {
     top: calc(1 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
 @keyframes drop-2 {
-  to {
+  1% {
+    opacity: 1;
+  }
+  100% {
     top: calc(2 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
 @keyframes drop-3 {
-  to {
+  1% {
+    opacity: 1;
+  }
+  100% {
     top: calc(3 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
 @keyframes drop-4 {
-  to {
+  1% {
+    opacity: 1;
+  }
+  100% {
     top: calc(4 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
 @keyframes drop-5 {
-  to {
+  1% {
+    opacity: 1;
+  }
+  100% {
     top: calc(5 * 100% / 6 + 5px);
+    opacity: 1;
   }
 }
