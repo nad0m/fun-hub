@@ -12,7 +12,7 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     path: '/loveletter',
     thumbnail: loveletter,
     minPlayers: 2,
-    maxPlayers: 4,
+    maxPlayers: 6,
     active: true,
   },
   ConnectFour: {

@@ -54,12 +54,12 @@ export type EffectFn = (
 ) => LoveLetterState | boolean | void
 
 export const BaseCards: { name: CardName; value: number; count: number }[] = [
-  { name: 'Guard', value: 1, count: 5 },
-  { name: 'Priest', value: 2, count: 2 },
-  { name: 'Baron', value: 3, count: 2 },
-  { name: 'Handmaid', value: 4, count: 2 },
-  { name: 'Prince', value: 5, count: 2 },
-  { name: 'King', value: 6, count: 1 },
+  { name: 'Guard', value: 1, count: 7 },
+  { name: 'Priest', value: 2, count: 3 },
+  { name: 'Baron', value: 3, count: 3 },
+  { name: 'Handmaid', value: 4, count: 3 },
+  { name: 'Prince', value: 5, count: 3 },
+  { name: 'King', value: 6, count: 2 },
   { name: 'Countess', value: 7, count: 1 },
   { name: 'Princess', value: 8, count: 1 },
 ]

@@ -114,12 +114,11 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
               ) {
                 const hasTargets = checkTargets(G, currentPlayer)
 
-                broadcastMessage(
-                  G,
-                  `${player.name} discards ${cardName}; all targets are protected.`,
-                )
-
                 if (!hasTargets) {
+                  broadcastMessage(
+                    G,
+                    `${player.name} discards ${cardName}; all targets are protected.`,
+                  )
                   events?.setActivePlayers({
                     currentPlayer: {
                       stage: 'EndTurn',
