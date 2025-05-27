@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { CommonGamePhases, ConnectFourState } from '@games';
 import { FunHubBoardProps } from 'types';
 import { Avatar, Box, Card, Center, Text } from '@mantine/core';
@@ -8,20 +8,12 @@ import { GameBoardPropsWrapper, RematchVote } from 'components';
 
 const COLS = 7;
 
-type AnimatingPiece = {
-  row: number;
-  col: number;
-  playerId: string;
-};
-
 export const ConnectFourComponent = (
   props: FunHubBoardProps<ConnectFourState>
 ) => {
   const { G, ctx, moves, isActive, matchData, playerID } = props;
-  const [animatingPiece, setAnimatingPiece] = useState<AnimatingPiece | null>(
-    null
-  );
   const boardRef = useRef<HTMLDivElement | null>(null);
+  const isAnimating = useRef<boolean>(false);
   const { board, winner, winningCoords, draw, players, recentPiece } = G;
   const { currentPlayer, phase } = ctx;
   const clientPlayer = players[playerID as string];
@@ -29,7 +21,7 @@ export const ConnectFourComponent = (
   const handleClick = (col: number) => {
     if (
       !isActive ||
-      animatingPiece !== null ||
+      isAnimating.current ||
       phase !== CommonGamePhases.PlayPhase
     )
       return;
@@ -61,6 +53,15 @@ export const ConnectFourComponent = (
       />
     );
   };
+
+  useEffect(() => {
+    if (recentPiece) {
+      isAnimating.current = true;
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 600);
+    }
+  }, [recentPiece]);
 
   return (
     <Box>
