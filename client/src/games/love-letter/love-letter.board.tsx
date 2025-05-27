@@ -6,6 +6,7 @@ import {
   Flex,
   Group,
   Paper,
+  SimpleGrid,
   Stack,
   Text,
 } from '@mantine/core';
@@ -19,7 +20,7 @@ import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { FunHubBoardProps } from 'types';
 import { LoveLetterPlayerCard } from 'components/love-letter-player-card/love-letter-player-card';
 import { ActionMap } from './action-map';
-import { IconMathGreater } from '@tabler/icons-react';
+import { useMediaQuery } from 'usehooks-ts';
 
 export const LoveLetterBoardComponent = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
@@ -30,7 +31,8 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
       matchData,
       moves,
     } = props;
-
+    const tablet = useMediaQuery('(min-width: 620px)');
+    const desktop = useMediaQuery('(min-width: 1000px)');
     const baronData = G.players[playerID as string]?.baronData;
     const players = Object.values(G.players).filter(
       ({ id }) => id !== playerID
@@ -43,22 +45,33 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
     const currentStage: StageKey | null =
       (activePlayers?.[playerID || ''] as StageKey) || null;
 
+    let cols = 1;
+    if (tablet) cols = 2;
+    if (desktop) cols = 3;
+
+    const Action = ActionMap[currentStage] || null;
+
     return (
-      <Box style={{ margin: 'auto' }} maw={700}>
-        <Stack gap="xs" mb="md">
-          {players.map((player, idx) => (
+      <Box style={{ margin: 'auto' }}>
+        <Stack gap="xs" mb="md" align="center">
+          <SimpleGrid cols={cols} w="100%">
+            {players.map((player, idx) => (
+              <Box key={idx} w="100%">
+                <LoveLetterPlayerCard
+                  player={player}
+                  hasBorder={currentPlayer === player.id}
+                />
+              </Box>
+            ))}
+          </SimpleGrid>
+          <Divider w="100%" />
+          <Box w="100%" maw={600}>
             <LoveLetterPlayerCard
-              key={idx}
-              player={player}
-              hasBorder={currentPlayer === player.id}
+              player={clientPlayer}
+              hasBorder={currentPlayer === clientPlayer.id}
+              isClientPlayer
             />
-          ))}
-          <Divider />
-          <LoveLetterPlayerCard
-            player={clientPlayer}
-            hasBorder={currentPlayer === clientPlayer.id}
-            isClientPlayer
-          />
+          </Box>
         </Stack>
 
         <Card
@@ -88,7 +101,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
               <>
                 <Divider my="xs" />
                 <Center style={{ flexDirection: 'column' }}>
-                  {ActionMap[currentStage](props)}
+                  <Action {...props} />
                 </Center>
               </>
             )}

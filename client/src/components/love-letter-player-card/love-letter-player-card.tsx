@@ -67,7 +67,7 @@ export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
       </Text>
       <Paper p="sm" display="flex" mih={80}>
         <Group gap="xs">
-          <Avatar.Group spacing="lg">
+          <Avatar.Group spacing="xl">
             {player.discard.map((card, idx) => (
               <Avatar
                 key={idx}
