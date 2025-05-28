@@ -6,7 +6,6 @@ import {
   Flex,
   Group,
   Paper,
-  SimpleGrid,
   Stack,
   Text,
 } from '@mantine/core';
@@ -34,9 +33,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
     const tablet = useMediaQuery('(min-width: 620px)');
     const desktop = useMediaQuery('(min-width: 1000px)');
     const baronData = G.players[playerID as string]?.baronData;
-    const players = Object.values(G.players).filter(
-      ({ id }) => id !== playerID
-    );
+    const players = Object.values(G.players);
     const playersStillActive = Object.values(G.players).filter(
       ({ isActive }) => isActive
     );
@@ -45,31 +42,33 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
     const currentStage: StageKey | null =
       (activePlayers?.[playerID || ''] as StageKey) || null;
 
-    let cols = 1;
-    if (tablet) cols = 2;
-    if (desktop) cols = 3;
+    let miw: string | number = '100%';
+    if (tablet) miw = 450;
+    if (desktop) miw = 550;
 
     const Action = ActionMap[currentStage] || null;
 
     return (
       <Box style={{ margin: 'auto' }}>
         <Stack gap="xs" mb="md" align="center">
-          <SimpleGrid cols={cols} w="100%">
-            {players.map((player, idx) => (
-              <Box key={idx} w="100%">
+          <Flex w="100%" wrap="wrap" gap={8} justify="center">
+            {[...players, ...players].map((player, idx) => (
+              <Box key={idx} flex={1} miw={miw} maw={miw}>
                 <LoveLetterPlayerCard
                   player={player}
                   hasBorder={currentPlayer === player.id}
+                  isClientPlayer={playerID === player.id}
                 />
               </Box>
             ))}
-          </SimpleGrid>
+          </Flex>
           <Divider w="100%" />
-          <Box w="100%" maw={600}>
+          <Box w="100%" maw={400}>
             <LoveLetterPlayerCard
               player={clientPlayer}
               hasBorder={currentPlayer === clientPlayer.id}
               isClientPlayer
+              handOnly
             />
           </Box>
         </Stack>
