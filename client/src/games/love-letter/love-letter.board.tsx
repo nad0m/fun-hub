@@ -59,7 +59,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
       <Box style={{ margin: 'auto' }}>
         <Stack gap="xs" mb="md" align="center">
           <Flex w="100%" wrap="wrap" gap={8} justify="center">
-            {[...players, ...players].map((player, idx) => (
+            {players.map((player, idx) => (
               <Box key={idx} flex={1} miw={miw} maw={miw}>
                 <LoveLetterPlayerCard
                   player={player}
@@ -75,7 +75,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
             <LoveLetterPlayerCard
               player={clientPlayer}
               deck={G.deck}
-              hasBorder={currentPlayer === clientPlayer.id}
+              hasBorder={false}
               isClientPlayer
               handOnly
             />
@@ -98,7 +98,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
                   size="xs"
                   c={idx === G.message.length - 1 ? 'red' : 'indigo'}
                 >
-                  {idx === G.message.length - 1 ? '> ' : ''}
+                  {idx === G.message.length - 1 ? '>>> ' : ''}
                   {text}
                 </Text>
               ))}
@@ -126,6 +126,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
                 <LoveLetterShowHands
                   players={playersStillActive}
                   defaultOpened={G.deck.length === 0}
+                  discard={G.discard}
                   subtitle={
                     G.deck.length === 0
                       ? 'No cards left in deck. Comparing hands:'

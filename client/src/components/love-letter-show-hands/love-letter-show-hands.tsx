@@ -1,4 +1,4 @@
-import { LoveLetterPlayer } from '@games';
+import { Card as CardType, LoveLetterPlayer } from '@games';
 import {
   Avatar,
   Button,
@@ -16,12 +16,14 @@ type LoveLetterShowHandsProps = {
   players: LoveLetterPlayer[];
   subtitle?: string;
   defaultOpened?: boolean;
+  discard?: CardType;
 };
 
 export const LoveLetterShowHands: FC<LoveLetterShowHandsProps> = ({
   players,
   subtitle = 'Showing hands',
   defaultOpened = false,
+  discard,
 }) => {
   const [opened, { open, close }] = useDisclosure(defaultOpened);
 
@@ -61,6 +63,21 @@ export const LoveLetterShowHands: FC<LoveLetterShowHandsProps> = ({
               </Center>
             );
           })}
+          {discard && (
+            <Center style={{ flexDirection: 'column' }}>
+              <Text size="sm" fw={700} c="indigo">
+                Hidden card:
+              </Text>
+              <Card p="xs">
+                <Avatar
+                  src={getCardImage(discard.name)}
+                  radius="md"
+                  size="xl"
+                  style={{ height: '114px' }}
+                />
+              </Card>
+            </Center>
+          )}
         </SimpleGrid>
       </Modal>
     </>

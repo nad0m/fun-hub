@@ -102,19 +102,14 @@ export const invokePrinceEffect = (G: LoveLetterState, targetId: string) => {
   return `${target.name} discards their hand and draws new card.`
 }
 
-export const invokeKingEffect = (
-  G: LoveLetterState,
-  currentPlayer: string,
-  targetId: string,
-) => {
+export const invokeKingEffect = (G: LoveLetterState, currentPlayer: string) => {
   const player = getPlayer(G, currentPlayer)
-  const target = getPlayer(G, targetId)
 
   const playerCard = player.hand.pop() as Card
-  const targetCard = target.hand.pop() as Card
+  const hiddenCard = { ...G.discard }
 
-  player.hand.push(targetCard)
-  target.hand.push(playerCard)
+  player.hand.push(hiddenCard)
+  G.discard = playerCard
 
-  return `${player.name} & ${target.name} traded hands.`
+  return `${player.name} swapped with the hidden card.`
 }

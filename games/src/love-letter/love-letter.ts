@@ -108,12 +108,7 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
               playCard(G, currentPlayer, cardName)
 
               // check for valid targets
-              if (
-                cardName === 'Guard' ||
-                cardName === 'Priest' ||
-                cardName === 'Baron' ||
-                cardName === 'King'
-              ) {
+              if (cardName === 'Guard' || cardName === 'Priest' || cardName === 'Baron') {
                 const hasTargets = checkTargets(G, currentPlayer)
 
                 if (!hasTargets) {
@@ -162,6 +157,19 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
                 invokeHandmaidEffect(G, currentPlayer)
                 const playerName = getPlayerName(G, currentPlayer)
                 broadcastMessage(G, `${playerName} is protected until their next round.`)
+                events?.setActivePlayers({
+                  currentPlayer: {
+                    stage: 'EndTurn',
+                  },
+                })
+                return
+              }
+
+              if (cardName === 'King') {
+                const message = invokeKingEffect(G, currentPlayer)
+
+                broadcastMessage(G, message)
+
                 events?.setActivePlayers({
                   currentPlayer: {
                     stage: 'EndTurn',
@@ -302,21 +310,6 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
           },
           next: 'EndTurn',
         },
-        King: {
-          moves: {
-            targetPlayer: (G, { events, currentPlayer }, targetId: string) => {
-              if (targetIsProtected(G, targetId)) {
-                return
-              }
-
-              const message = invokeKingEffect(G, currentPlayer, targetId)
-
-              broadcastMessage(G, message)
-              events?.endStage()
-            },
-          },
-          next: 'EndTurn',
-        },
         EndTurn: {
           moves: {
             endTurn: (G, { events, currentPlayer }) => {
@@ -373,6 +366,7 @@ export const LoveLetter: Game<LoveLetterState> = {
       gameStartTimer: GAME_START_COUNTDOWN_SECONDS,
       message: [],
       winner: null,
+      discard: deck.pop() as Card,
     }
   },
   minPlayers: 2,

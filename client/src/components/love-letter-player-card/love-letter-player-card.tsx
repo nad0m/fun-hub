@@ -111,9 +111,8 @@ export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
             <Center style={{ gap: 8 }} w="100%">
               <Avatar.Group spacing={0}>
                 {player.hand.map((card, idx) => (
-                  <Box pos="relative">
+                  <Box key={idx} pos="relative">
                     <Avatar
-                      key={idx}
                       src={getCardImage(card.name)}
                       radius="md"
                       size="xl"

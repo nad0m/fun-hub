@@ -46,6 +46,7 @@ export type LoveLetterState = MultiplayerGameWithLobbyState<LoveLetterPlayer> & 
   deck: Card[]
   message: string[]
   winner: string | null
+  discard: Card
 }
 
 export type EffectFn = (
@@ -155,6 +156,7 @@ export const resetGame = (G: LoveLetterState, ctx: Ctx) => {
     G.players[playerId].isReady = false
     drawCard(G, playerId)
   })
+  G.discard = G.deck.pop() as Card
 }
 
 export const getHighestHand = (G: LoveLetterState) => {
