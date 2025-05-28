@@ -86,19 +86,23 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
           py="sm"
           pos="sticky"
           bottom={0}
-          mx={-24}
+          mx={tablet ? 'auto' : -24}
           mt="md"
-          style={{ zIndex: 99, justifyContent: 'center' }}
+          maw={800}
+          style={{
+            zIndex: 99,
+            justifyContent: 'center',
+          }}
         >
-          <Paper px="xs" py="xs">
-            <Flex direction="column">
+          <Paper px="xs" py="xs" h={104}>
+            <Flex direction="column" justify="flex-end" h="100%">
               {G.message.map((text, idx) => (
                 <Text
                   key={idx}
                   size="xs"
                   c={idx === G.message.length - 1 ? 'red' : 'indigo'}
                 >
-                  {idx === G.message.length - 1 ? '>>> ' : ''}
+                  {idx === G.message.length - 1 ? '> ' : ''}
                   {text}
                 </Text>
               ))}
