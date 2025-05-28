@@ -105,7 +105,9 @@ export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
               </ActionIcon>
               <Flex align="center" style={{ gap: 4 }}>
                 <IconCards size={18} />
-                <Text size="sm">{deck.length}</Text>
+                <Text size="xs" fw={700}>
+                  {deck.length}
+                </Text>
               </Flex>
             </Flex>
             <Center style={{ gap: 8 }} w="100%">
