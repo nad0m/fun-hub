@@ -39,12 +39,13 @@ export type LoveLetterPlayer = MultiplayerGamePlayer & {
   isActive: boolean
   priestData: PriestData | null
   baronData: BaronData | null
+  wins: number
 }
 
 export type LoveLetterState = MultiplayerGameWithLobbyState<LoveLetterPlayer> & {
   deck: Card[]
   message: string[]
-  winner: LoveLetterPlayer | null
+  winner: string | null
 }
 
 export type EffectFn = (
@@ -54,6 +55,17 @@ export type EffectFn = (
 ) => LoveLetterState | boolean | void
 
 export const BaseCards: { name: CardName; value: number; count: number }[] = [
+  { name: 'Guard', value: 1, count: 5 },
+  { name: 'Priest', value: 2, count: 2 },
+  { name: 'Baron', value: 3, count: 2 },
+  { name: 'Handmaid', value: 4, count: 2 },
+  { name: 'Prince', value: 5, count: 2 },
+  { name: 'King', value: 6, count: 1 },
+  { name: 'Countess', value: 7, count: 1 },
+  { name: 'Princess', value: 8, count: 1 },
+]
+
+export const BaseCardsLg: { name: CardName; value: number; count: number }[] = [
   { name: 'Guard', value: 1, count: 7 },
   { name: 'Priest', value: 2, count: 3 },
   { name: 'Baron', value: 3, count: 3 },
@@ -64,9 +76,10 @@ export const BaseCards: { name: CardName; value: number; count: number }[] = [
   { name: 'Princess', value: 8, count: 1 },
 ]
 
-export function createDeck(): Card[] {
+export function createDeck(numPlayers: number): Card[] {
   const cards: Card[] = []
-  for (const { name, value, count } of BaseCards) {
+  const deck = numPlayers > 4 ? BaseCardsLg : BaseCards
+  for (const { name, value, count } of deck) {
     for (let i = 0; i < count; i++) {
       cards.push({ name, value, count })
     }
@@ -130,7 +143,7 @@ export const targetIsProtected = (G: LoveLetterState, targetId: string) => {
 }
 
 export const resetGame = (G: LoveLetterState, ctx: Ctx) => {
-  G.deck = createDeck()
+  G.deck = createDeck(ctx.numPlayers)
   ctx.playOrder.forEach(playerId => {
     G.players[playerId].hand = []
     G.players[playerId].discard = []
@@ -160,5 +173,7 @@ export const getHighestHand = (G: LoveLetterState) => {
     }
   })
 
+  winner.wins++
+  G.winner = winner.id
   return `${winner.name} wins with the highest card in hand!`
 }

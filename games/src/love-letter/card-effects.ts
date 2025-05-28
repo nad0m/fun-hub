@@ -6,9 +6,10 @@ export const invokeGuardEffect = (
 ) => {
   const { targetId, guess } = payload
 
-  const hasCard = !!G.players[targetId].hand.find(({ name }) => name === guess)
+  const hasCard = G.players[targetId].hand.find(({ name }) => name === guess)
 
   if (hasCard) {
+    playCard(G, targetId, hasCard.name)
     G.players[targetId].isActive = false
     return true
   }

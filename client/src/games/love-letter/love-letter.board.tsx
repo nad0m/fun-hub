@@ -9,7 +9,13 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { LoveLetterState, StageKey, CommonGamePhases } from '@games';
+import {
+  LoveLetterState,
+  StageKey,
+  CommonGamePhases,
+  BaseCards,
+  BaseCardsLg,
+} from '@games';
 import {
   GameBoardPropsWrapper,
   LoveLetterShowHands,
@@ -25,7 +31,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
   (props: FunHubBoardProps<LoveLetterState>) => {
     const {
       G,
-      ctx: { currentPlayer, activePlayers, phase },
+      ctx: { currentPlayer, activePlayers, phase, numPlayers },
       playerID,
       matchData,
       moves,
@@ -37,14 +43,15 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
     const playersStillActive = Object.values(G.players).filter(
       ({ isActive }) => isActive
     );
+    const baseCards = numPlayers > 4 ? BaseCardsLg : BaseCards;
     const clientPlayer = G.players[playerID || ''];
     const isClientTurn = currentPlayer === playerID;
     const currentStage: StageKey | null =
       (activePlayers?.[playerID || ''] as StageKey) || null;
 
     let miw: string | number = '100%';
-    if (tablet) miw = 450;
-    if (desktop) miw = 550;
+    if (tablet) miw = 350;
+    if (desktop) miw = 450;
 
     const Action = ActionMap[currentStage] || null;
 
@@ -56,6 +63,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
               <Box key={idx} flex={1} miw={miw} maw={miw}>
                 <LoveLetterPlayerCard
                   player={player}
+                  deck={G.deck}
                   hasBorder={currentPlayer === player.id}
                   isClientPlayer={playerID === player.id}
                 />
@@ -66,6 +74,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
           <Box w="100%" maw={400}>
             <LoveLetterPlayerCard
               player={clientPlayer}
+              deck={G.deck}
               hasBorder={currentPlayer === clientPlayer.id}
               isClientPlayer
               handOnly

@@ -60,6 +60,8 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
 
         if (activePlayers.length === 1) {
           broadcastMessage(G, `${activePlayers[0].name} won the round! Rematch?`)
+          activePlayers[0].wins++
+          G.winner = activePlayers[0].id
           events?.endPhase()
           return
         }
@@ -345,9 +347,9 @@ const phases: PhaseMap<LoveLetterState, Ctx> = {
 
 export const LoveLetter: Game<LoveLetterState> = {
   name: 'LoveLetter',
-  setup: ({ playOrder }) => {
+  setup: ({ playOrder, numPlayers }) => {
     const players: { [key: string]: LoveLetterPlayer } = {}
-    const deck = createDeck()
+    const deck = createDeck(numPlayers)
 
     playOrder.forEach((playerId, idx) => {
       players[playerId] = {
@@ -361,6 +363,7 @@ export const LoveLetter: Game<LoveLetterState> = {
         isProtected: false,
         priestData: null,
         baronData: null,
+        wins: 0,
       }
     })
 
@@ -373,7 +376,7 @@ export const LoveLetter: Game<LoveLetterState> = {
     }
   },
   minPlayers: 2,
-  maxPlayers: 4,
+  maxPlayers: 6,
   phases,
   turn: {
     activePlayers: ActivePlayers.ALL,

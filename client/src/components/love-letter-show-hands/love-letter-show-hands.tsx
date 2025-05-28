@@ -43,7 +43,7 @@ export const LoveLetterShowHands: FC<LoveLetterShowHandsProps> = ({
         <SimpleGrid cols={2}>
           {players.map(({ name, hand }, idx) => {
             return (
-              <Center style={{ flexDirection: 'column' }}>
+              <Center key={idx} style={{ flexDirection: 'column' }}>
                 <Text size="sm" fw={700} c="yellow">
                   {name}'s hand:
                 </Text>

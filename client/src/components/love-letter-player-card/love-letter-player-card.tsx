@@ -1,19 +1,23 @@
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconCards, IconInfoCircle } from '@tabler/icons-react';
 import {
   ActionIcon,
   Avatar,
   Badge,
+  Box,
   Card,
   Center,
   Divider,
+  Flex,
   Group,
   Image,
+  MantineSize,
   Modal,
   Paper,
+  Rating,
   Text,
 } from '@mantine/core';
 import { FC } from 'react';
-import { LoveLetterPlayer } from '@games';
+import { Card as CardType, LoveLetterPlayer } from '@games';
 import { getCardImage } from 'utils/love-letter';
 import { useDisclosure } from '@mantine/hooks';
 import ruleCard from '../../assets/love-letter/rule-card.png';
@@ -23,6 +27,7 @@ type LoveLetterPlayerCardProps = {
   hasBorder: boolean;
   isClientPlayer?: boolean;
   handOnly?: boolean;
+  deck: CardType[];
 };
 
 export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
@@ -30,33 +35,39 @@ export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
   hasBorder,
   isClientPlayer,
   handOnly,
+  deck,
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { name, isActive, isProtected } = player;
   return (
     <Card
-      withBorder
       padding="xs"
       radius="md"
       mih={130}
       style={{ ...(hasBorder ? { border: '2px solid #38d9a9' } : {}) }}
+      withBorder
     >
       {!handOnly && (
         <>
-          <Group>
-            <Text size="xs" fw={900} c={isClientPlayer ? 'indigo' : 'red'}>
-              {name}
-              {isClientPlayer && ' (You)'}
-            </Text>
-            <Badge size="xs" color={isActive ? 'teal' : 'red'}>
-              {isActive ? 'Active' : 'Eliminated'}
-            </Badge>
-            {isProtected && (
-              <Badge size="xs" color="indigo">
-                PROTECTED
+          <Flex justify="space-between">
+            <Group>
+              <Text size="xs" fw={900} c={isClientPlayer ? 'indigo' : 'red'}>
+                {name}
+                {isClientPlayer && ' (You)'}
+              </Text>
+              <Badge size="xs" color={isActive ? 'teal' : 'red'}>
+                {isActive ? 'Active' : 'Eliminated'}
               </Badge>
-            )}
-          </Group>
+              {isProtected && (
+                <Badge size="xs" color="indigo">
+                  PROTECTED
+                </Badge>
+              )}
+            </Group>
+            <Text size="xs" fw={700}>
+              Wins: {player.wins}
+            </Text>
+          </Flex>
 
           <Divider my="xs" />
 
@@ -85,22 +96,43 @@ export const LoveLetterPlayerCard: FC<LoveLetterPlayerCardProps> = ({
             Your hand:
           </Text>
           <Paper display="flex" p="xs" mih={138}>
-            <ActionIcon variant="light" color="gray" size="sm" onClick={open}>
-              <IconInfoCircle
-                style={{ width: '70%', height: '70%' }}
-                stroke={1.5}
-              />
-            </ActionIcon>
+            <Flex direction="column" align="flex-start" gap="sm">
+              <ActionIcon variant="light" color="gray" size="sm" onClick={open}>
+                <IconInfoCircle
+                  style={{ width: '70%', height: '70%' }}
+                  stroke={1.5}
+                />
+              </ActionIcon>
+              <Flex align="center" style={{ gap: 4 }}>
+                <IconCards size={18} />
+                <Text size="sm">{deck.length}</Text>
+              </Flex>
+            </Flex>
             <Center style={{ gap: 8 }} w="100%">
               <Avatar.Group spacing={0}>
                 {player.hand.map((card, idx) => (
-                  <Avatar
-                    key={idx}
-                    src={getCardImage(card.name)}
-                    radius="md"
-                    size="xl"
-                    style={{ height: '114px' }}
-                  />
+                  <Box pos="relative">
+                    <Avatar
+                      key={idx}
+                      src={getCardImage(card.name)}
+                      radius="md"
+                      size="xl"
+                      style={{ height: '114px' }}
+                    />
+                    <Rating
+                      pos="absolute"
+                      bottom="50%"
+                      left="85%"
+                      value={card.count}
+                      count={card.count}
+                      size={8 as unknown as MantineSize}
+                      style={{
+                        transform: 'translate(-50%, -50%) rotate(-90deg)',
+                        '--rating-color': 'lime',
+                      }}
+                      readOnly
+                    />
+                  </Box>
                 ))}
               </Avatar.Group>
             </Center>

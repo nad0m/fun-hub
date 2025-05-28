@@ -8,5 +8,5 @@ export const LoveLetterClient = Client({
   game: LoveLetter,
   board: LoveLetterBoard,
   multiplayer: SocketIO({ server: SERVER_URL }),
-  debug: false,
+  debug: true,
 });
