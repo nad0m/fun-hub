@@ -2,22 +2,16 @@ import {
   Box,
   Card,
   Center,
-  Divider,
   Flex,
   Group,
   Paper,
   Stack,
   Text,
 } from '@mantine/core';
-import {
-  LoveLetterState,
-  StageKey,
-  CommonGamePhases,
-  BaseCards,
-  BaseCardsLg,
-} from '@games';
+import { LoveLetterState, StageKey, CommonGamePhases } from '@games';
 import {
   GameBoardPropsWrapper,
+  LoveLetterPlayerHand,
   LoveLetterShowHands,
   RematchVote,
 } from 'components';
@@ -43,7 +37,6 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
     const playersStillActive = Object.values(G.players).filter(
       ({ isActive }) => isActive
     );
-    const baseCards = numPlayers > 4 ? BaseCardsLg : BaseCards;
     const clientPlayer = G.players[playerID || ''];
     const isClientTurn = currentPlayer === playerID;
     const currentStage: StageKey | null =
@@ -63,35 +56,24 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
               <Box key={idx} flex={1} miw={miw} maw={miw}>
                 <LoveLetterPlayerCard
                   player={player}
-                  deck={G.deck}
                   hasBorder={currentPlayer === player.id}
                   isClientPlayer={playerID === player.id}
                 />
               </Box>
             ))}
           </Flex>
-          <Divider w="100%" />
-          <Box w="100%" maw={400}>
-            <LoveLetterPlayerCard
-              player={clientPlayer}
-              deck={G.deck}
-              hasBorder={false}
-              isClientPlayer
-              handOnly
-            />
-          </Box>
         </Stack>
-
         <Card
-          py="sm"
+          p="xs"
           pos="sticky"
           bottom={0}
           mx={tablet ? 'auto' : -24}
           mt="md"
-          maw={800}
+          maw={500}
           style={{
             zIndex: 99,
             justifyContent: 'center',
+            gap: 8,
           }}
         >
           <Paper px="xs" py="xs" h={104}>
@@ -108,37 +90,37 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
               ))}
             </Flex>
           </Paper>
-          {(isClientTurn || baronData) &&
-            phase === CommonGamePhases.PlayPhase && (
-              <>
-                <Divider my="xs" />
-                <Center style={{ flexDirection: 'column' }}>
-                  <Action {...props} />
-                </Center>
-              </>
-            )}
+
+          <Center style={{ flexDirection: 'column', gap: 8 }}>
+            <Box w="100%" maw={500}>
+              <LoveLetterPlayerHand
+                player={clientPlayer}
+                playerRatio={`${playersStillActive.length}/${numPlayers}`}
+                deck={G.deck}
+              />
+            </Box>
+            {(isClientTurn || baronData) &&
+              phase === CommonGamePhases.PlayPhase && <Action {...props} />}
+          </Center>
           {phase === CommonGamePhases.WinPhase && (
-            <>
-              <Divider my="xs" />
-              <Group justify="space-between">
-                <RematchVote
-                  onClick={() => moves.restart()}
-                  matchData={matchData}
-                  isReady={clientPlayer?.isReady}
-                  players={G.players}
-                />
-                <LoveLetterShowHands
-                  players={playersStillActive}
-                  defaultOpened={G.deck.length === 0}
-                  discard={G.discard}
-                  subtitle={
-                    G.deck.length === 0
-                      ? 'No cards left in deck. Comparing hands:'
-                      : "Winner's hand:"
-                  }
-                />
-              </Group>
-            </>
+            <Group justify="space-between">
+              <RematchVote
+                onClick={() => moves.restart()}
+                matchData={matchData}
+                isReady={clientPlayer?.isReady}
+                players={G.players}
+              />
+              <LoveLetterShowHands
+                players={playersStillActive}
+                defaultOpened={G.deck.length === 0}
+                discard={G.discard}
+                subtitle={
+                  G.deck.length === 0
+                    ? 'No cards left in deck. Comparing hands:'
+                    : "Winner's hand:"
+                }
+              />
+            </Group>
           )}
         </Card>
       </Box>

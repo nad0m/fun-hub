@@ -44,6 +44,6 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     thumbnail: themind,
     minPlayers: 2,
     maxPlayers: 10,
-    active: false,
+    active: true,
   },
 };
