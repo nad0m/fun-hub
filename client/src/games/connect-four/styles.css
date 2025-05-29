@@ -48,7 +48,11 @@
 }
 
 .cell.highlight {
-  border: 2px solid limegreen;
+  border: 2px solid #00ff37;
+}
+
+.cell.recent {
+  border: 2px solid #00ff37;
 }
 
 .piece {

@@ -39,6 +39,8 @@ export const ConnectFourComponent = (
     });
 
     if (winnerPiece) className += ' highlight';
+    else if (row === recentPiece?.row && col == recentPiece.col)
+      className += ' recent';
 
     const timing = (row + 1) * 80;
     const winningCoordTiming =
