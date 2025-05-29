@@ -50,7 +50,7 @@ export const ConnectFourComponent = (
         key={`${row}-${col}`}
         className={className}
         style={{
-          transition: `background ${timing}ms step-end, border ${winningCoordTiming}ms step-end`,
+          transition: `background ${timing}ms step-end, outline ${timing}ms step-end, border ${winningCoordTiming}ms step-end`,
         }}
       />
     );
