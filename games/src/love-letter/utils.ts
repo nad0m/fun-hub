@@ -44,6 +44,7 @@ export type LoveLetterPlayer = MultiplayerGamePlayer & {
 
 export type LoveLetterState = MultiplayerGameWithLobbyState<LoveLetterPlayer> & {
   deck: Card[]
+  deckSize: number
   message: string[]
   winner: string | null
   discard: Card

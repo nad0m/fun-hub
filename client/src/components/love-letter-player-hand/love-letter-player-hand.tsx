@@ -23,11 +23,13 @@ type LoveLetterPlayerHandProps = {
   player: LoveLetterPlayer;
   playerRatio?: string;
   deck: CardType[];
+  deckSize: number;
   children?: ReactNode;
 };
 export const LoveLetterPlayerHand: FC<LoveLetterPlayerHandProps> = ({
   player,
   deck,
+  deckSize,
   playerRatio,
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -85,21 +87,21 @@ export const LoveLetterPlayerHand: FC<LoveLetterPlayerHandProps> = ({
           right={8}
           p="xs"
           flex={1}
-          w={68}
+          w={75}
           style={{ gap: 8 }}
           h="fit-content"
           withBorder
         >
-          <Flex align="flex-start" justify="space-between">
-            <IconCards size={14} />
-            <Text size="xs" fw={700} c="indigo">
-              {deck.length}
+          <Flex align="center" justify="space-between">
+            <IconUsers size={14} />
+            <Text size="xs" fw={600} c="indigo">
+              {playerRatio}
             </Text>
           </Flex>
-          <Flex align="flex-start" justify="space-between">
-            <IconUsers size={14} />
-            <Text size="xs" fw={700} c="indigo">
-              {playerRatio}
+          <Flex align="center" justify="space-between">
+            <IconCards size={14} />
+            <Text size="xs" fw={600} c="indigo">
+              {deck.length}/{deckSize}
             </Text>
           </Flex>
         </Card>

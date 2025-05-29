@@ -343,6 +343,7 @@ export const LoveLetter: Game<LoveLetterState> = {
   setup: ({ playOrder, numPlayers }) => {
     const players: { [key: string]: LoveLetterPlayer } = {}
     const deck = createDeck(numPlayers)
+    const deckSize = deck.length
 
     playOrder.forEach((playerId, idx) => {
       players[playerId] = {
@@ -363,6 +364,7 @@ export const LoveLetter: Game<LoveLetterState> = {
     return {
       players,
       deck,
+      deckSize,
       gameStartTimer: GAME_START_COUNTDOWN_SECONDS,
       message: [],
       winner: null,

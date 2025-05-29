@@ -97,6 +97,7 @@ export const LoveLetterBoardComponent = GameBoardPropsWrapper(
                 player={clientPlayer}
                 playerRatio={`${playersStillActive.length}/${numPlayers}`}
                 deck={G.deck}
+                deckSize={G.deckSize}
               />
             </Box>
             {(isClientTurn || baronData) &&
