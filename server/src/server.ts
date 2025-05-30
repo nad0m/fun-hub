@@ -82,7 +82,7 @@ server.router.post('/games/:name/:id/join', koaBody(), async (ctx) => {
     gameName,
     playerCredentials,
   }).catch((e) => {
-    console.error('Error inserting log', e);
+    console.error('Error inserting log into DB', e);
   });
 });
 
