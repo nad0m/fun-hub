@@ -9,4 +9,3 @@ export * from './the-mind'
 export * from './tic-tac-toe'
 export * from './love-letter'
 export * from './connect-four'
-export * from './connect-four-sp';

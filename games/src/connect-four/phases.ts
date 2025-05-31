@@ -1,4 +1,4 @@
-import { ActivePlayers, INVALID_MOVE } from 'boardgame.io/dist/types/packages/core'
+import { ActivePlayers, INVALID_MOVE } from 'boardgame.io/core'
 import { CommonGamePhases, GAME_START_COUNTDOWN_SECONDS } from '../types'
 import { Ctx, PhaseMap } from 'boardgame.io'
 import {
@@ -6,7 +6,7 @@ import {
   ConnectFourState,
   createEmptyBoard,
   PlayerID,
-  resetGame,
+  resetConnectFourGame,
   ROWS,
 } from './utils'
 
@@ -33,7 +33,7 @@ export const readyUpPhase: PhaseMap<ConnectFourState, Ctx>[0] = {
   turn: {
     activePlayers: ActivePlayers.ALL,
   },
-  onEnd: resetGame,
+  onEnd: resetConnectFourGame,
   start: true,
   next: CommonGamePhases.PlayPhase,
 }
@@ -53,6 +53,11 @@ export const playPhase: PhaseMap<ConnectFourState, Ctx>[0] = {
         }
       }
       return INVALID_MOVE
+    },
+    changeName(G: ConnectFourState, ctx: Ctx, name: string) {
+      if (name) {
+        G.players[ctx.playerID as string].name = name
+      }
     },
     reset: (G: ConnectFourState) => {
       G.board = createEmptyBoard()
@@ -89,8 +94,8 @@ export const winPhase: PhaseMap<ConnectFourState, Ctx>[0] = {
   },
   endIf: G => {
     const players = Object.values(G.players)
-    return players.every(({ isReady }) => isReady)
+    return players.some(({ isReady }) => isReady)
   },
-  onEnd: resetGame,
+  onEnd: resetConnectFourGame,
   next: CommonGamePhases.PlayPhase,
 }

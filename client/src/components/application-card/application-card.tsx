@@ -151,7 +151,7 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({ game }) => {
           <Button
             fullWidth
             variant="light"
-            onClick={open}
+            onClick={game.maxPlayers > 1 ? open : () => navigate(game.path)}
             disabled={!game.active}
           >
             {game.active ? 'Play' : 'Coming soon...'}

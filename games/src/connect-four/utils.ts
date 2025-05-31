@@ -40,7 +40,7 @@ export const setup: (ctx: Ctx, setupData?: unknown) => ConnectFourState = ({
   playOrder.forEach((playerId, idx) => {
     players[playerId] = {
       isReady: false,
-      name: `Player ${idx + 1}`,
+      name: idx === 0 ? 'Player' : 'CPU',
     }
   })
   return {
@@ -88,7 +88,7 @@ export function checkWinner(board: Board, playerID: PlayerID): Coordinate[] | nu
   return null
 }
 
-export const resetGame = (G: ConnectFourState, ctx: Ctx) => {
+export const resetConnectFourGame = (G: ConnectFourState, ctx: Ctx) => {
   G.board = createEmptyBoard()
   G.winner = ''
   G.winningCoords = null

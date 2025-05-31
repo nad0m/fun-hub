@@ -5,6 +5,10 @@ import { HomePage } from 'pages/home.page';
 import { GAMES_GLOSSARY } from 'config/games';
 import { LoveLetterClient } from 'games/love-letter';
 import { ConnectFourClient } from 'games/connect-four';
+import {
+  ConnectFourBoardSP,
+  ConnectFourComponentSP,
+} from 'games/connect-four/connect-four-sp.board';
 
 export function Router() {
   return (
@@ -49,6 +53,10 @@ export function Router() {
             GameClientComponent={ConnectFourClient}
           />
         }
+      />
+      <Route
+        path={`${GAMES_GLOSSARY.ConnectFour.path}`}
+        element={<ConnectFourBoardSP />}
       />
     </Routes>
   );
