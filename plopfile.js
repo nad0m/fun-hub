@@ -49,6 +49,7 @@ module.exports = function (plop) {
       },
     ],
     actions: [
+      // /game templates
       {
         type: 'add',
         path: 'games/src/{{kebabCase name}}/index.ts',
@@ -63,6 +64,14 @@ module.exports = function (plop) {
         type: 'append',
         path: 'games/src/index.ts',
         templateFile: 'plop/templates/games/create-game-index.hbs',
+        separator: '',
+      },
+      // client templates
+      // server templates
+      {
+        type: 'append',
+        path: 'server/src/games.ts',
+        templateFile: 'plop/templates/games/create-server-game-import.hbs',
         separator: '',
       },
     ],
