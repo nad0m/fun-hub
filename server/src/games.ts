@@ -7,3 +7,4 @@ export { TicTacToe } from '../../games/src';
 export { TheMind } from '../../games/src';
 export { LoveLetter } from '../../games/src';
 export { ConnectFour } from '../../games/src';
+export { ConnectFourSp } from '../../games/src';
