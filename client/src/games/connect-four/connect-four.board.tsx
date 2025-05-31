@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { CommonGamePhases, ConnectFourState } from '@games';
+import { COLS, CommonGamePhases, ConnectFourState } from '@games';
 import { FunHubBoardProps } from 'types';
 import { Avatar, Box, Card, Center, Text } from '@mantine/core';
 import './styles.css';
 import { GameWithLobbyWrapper } from 'components/game-with-lobby-wrapper';
 import { GameBoardPropsWrapper, RematchVote } from 'components';
-
-const COLS = 7;
 
 export const ConnectFourComponent = (
   props: FunHubBoardProps<ConnectFourState>

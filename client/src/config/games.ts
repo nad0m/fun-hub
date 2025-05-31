@@ -25,6 +25,16 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     maxPlayers: 2,
     active: true,
   },
+  ConnectFourSP: {
+    id: 'ConnectFourSP',
+    title: 'Connect Four (Single Player)',
+    description: 'Go head-to-head in a battle to own the grid against the CPU.',
+    path: '/connectfour',
+    thumbnail: connectfour,
+    minPlayers: 1,
+    maxPlayers: 1,
+    active: true,
+  },
   TicTacToe: {
     id: 'TicTacToe',
     title: 'Tic-Tac-Toe',
@@ -44,6 +54,6 @@ export const GAMES_GLOSSARY: Record<string, GameConfig> = {
     thumbnail: themind,
     minPlayers: 2,
     maxPlayers: 10,
-    active: true,
+    active: false,
   },
 };

@@ -1,7 +1,7 @@
 import { Game } from 'boardgame.io'
 import { CommonGamePhases } from '../types'
 import { playPhase, winPhase } from './phases'
-import { ConnectFourState, setup } from './utils'
+import { ConnectFourState, getBestMove, setup } from './utils'
 
 export const ConnectFourSp: Game<ConnectFourState> = {
   name: 'ConnectFourSp',
@@ -13,4 +13,10 @@ export const ConnectFourSp: Game<ConnectFourState> = {
     [CommonGamePhases.WinPhase]: winPhase,
   },
   setup,
+  ai: {
+    enumerate: G => {
+      const col = getBestMove(G.board)
+      return [{ move: 'dropPiece', args: [col] }]
+    },
+  },
 }
