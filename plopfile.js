@@ -38,4 +38,33 @@ module.exports = function (plop) {
       },
     ],
   })
+
+  plop.setGenerator('create-game', {
+    description: 'Create a new Fun Hub Game',
+    prompts: [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the game? (Title Case Name)',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'games/src/{{kebabCase name}}/index.ts',
+        templateFile: 'plop/templates/games/create-game-index.hbs',
+      },
+      {
+        type: 'add',
+        path: 'games/src/{{kebabCase name}}/{{kebabCase name}}.ts',
+        templateFile: 'plop/templates/games/create-game.hbs',
+      },
+      {
+        type: 'append',
+        path: 'games/src/index.ts',
+        templateFile: 'plop/templates/games/create-game-index.hbs',
+        separator: '',
+      },
+    ],
+  })
 }

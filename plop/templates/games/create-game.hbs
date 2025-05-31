@@ -7,11 +7,11 @@ import {
   MultiplayerGameWithLobbyState,
 } from '../types'
 
-export type {{titleCase name}}Player = MultiplayerGamePlayer
+export type {{pascalCase name}}Player = MultiplayerGamePlayer
 
-export type {{titleCase name}}State = MultiplayerGameWithLobbyState<{{titleCase name}}Player>
+export type {{pascalCase name}}State = MultiplayerGameWithLobbyState<{{pascalCase name}}Player>
 
-const phases: PhaseMap<{{titleCase name}}State, Ctx> = {
+const phases: PhaseMap<{{pascalCase name}}State, Ctx> = {
   [CommonGamePhases.ReadyUpPhase]: {
     // we want to let all players "ready up"
     turn: { activePlayers: ActivePlayers.ALL },
@@ -48,11 +48,11 @@ const phases: PhaseMap<{{titleCase name}}State, Ctx> = {
   },
 }
 
-export const {{titleCase name}}: Game<{{titleCase name}}State> = {
-  name: '{{titleCase name}}',
+export const {{pascalCase name}}: Game<{{pascalCase name}}State> = {
+  name: '{{pascalCase name}}',
   phases,
   setup: ({ playOrder }) => {
-    const players: { [key: string]: {{titleCase name}}Player } = {}
+    const players: { [key: string]: {{pascalCase name}}Player } = {}
     playOrder.forEach(playerId => {
       players[playerId] = {
         isReady: false,
