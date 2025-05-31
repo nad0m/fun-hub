@@ -1,0 +1,66 @@
+import { Ctx, Game, PhaseMap } from 'boardgame.io'
+import { ActivePlayers } from 'boardgame.io/core'
+import {
+  CommonGamePhases,
+  GAME_START_COUNTDOWN_SECONDS,
+  MultiplayerGamePlayer,
+  MultiplayerGameWithLobbyState,
+} from '../types'
+
+export type {{titleCase name}}Player = MultiplayerGamePlayer
+
+export type {{titleCase name}}State = MultiplayerGameWithLobbyState<{{titleCase name}}Player>
+
+const phases: PhaseMap<{{titleCase name}}State, Ctx> = {
+  [CommonGamePhases.ReadyUpPhase]: {
+    // we want to let all players "ready up"
+    turn: { activePlayers: ActivePlayers.ALL },
+    onBegin: G => {
+      G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
+    },
+    moves: {
+      toggleReady: (G, ctx) => {
+        G.players[ctx.playerID as string].isReady = !G.players[ctx.playerID as string].isReady
+
+        if (!G.players[ctx.playerID as string].isReady) {
+          G.gameStartTimer = GAME_START_COUNTDOWN_SECONDS
+        }
+      },
+      countDownToTransition: G => {
+        G.gameStartTimer -= 1
+      },
+    },
+    endIf: G => {
+      return G.gameStartTimer === 0
+    },
+    start: true,
+    next: CommonGamePhases.PlayPhase,
+  },
+  [CommonGamePhases.PlayPhase]: {
+    turn: {},
+    onBegin: G => {},
+    moves: {
+      samplePlayerMove: G => {},
+    },
+    endIf: G => {},
+    onEnd: (G, ctx) => {},
+    next: G => {},
+  },
+}
+
+export const {{titleCase name}}: Game<{{titleCase name}}State> = {
+  name: '{{titleCase name}}',
+  phases,
+  setup: ({ playOrder }) => {
+    const players: { [key: string]: {{titleCase name}}Player } = {}
+    playOrder.forEach(playerId => {
+      players[playerId] = {
+        isReady: false,
+      }
+    })
+    return {
+      players,
+      gameStartTimer: GAME_START_COUNTDOWN_SECONDS,
+    }
+  },
+}
