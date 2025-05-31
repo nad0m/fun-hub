@@ -1,8 +1,7 @@
 import { FC } from 'react';
+import classes from './{{name}}.module.css';
 
-type {{pascalCase name}}Props = {
-
-};
+type {{pascalCase name}}Props = {};
 
 export const {{pascalCase name}}: FC<{{pascalCase name}}Props> = () => {
   // State
@@ -10,7 +9,7 @@ export const {{pascalCase name}}: FC<{{pascalCase name}}Props> = () => {
   // Effects
 
   return (
-    <div>
+    <div className={classes['{{name}}']}>
       <h3>{{pascalCase name}}</h3>
       <p>Edit at /src/components/{{name}}</p>
     </div>
