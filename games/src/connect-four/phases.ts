@@ -54,11 +54,6 @@ export const playPhase: PhaseMap<ConnectFourState, Ctx>[0] = {
       }
       return INVALID_MOVE
     },
-    changeName(G: ConnectFourState, ctx: Ctx, name: string) {
-      if (name) {
-        G.players[ctx.playerID as string].name = name
-      }
-    },
     reset: (G: ConnectFourState) => {
       G.board = createEmptyBoard()
     },

@@ -30,15 +30,17 @@ export const ConnectFourComponentSP: FC<ConnectFourComponentSPProps> = ({
   const isAnimating = useRef<boolean>(false);
   const { board, winner, winningCoords, draw, players, recentPiece } = G || {};
   const { currentPlayer, phase } = ctx || {};
-  const clientPlayer = players?.[playerID as string];
 
   useEffect(() => {
     ConnectFourClientSP.start();
-    moves.changeName(playerName);
     const unsubscribe = ConnectFourClientSP.subscribe((state) => {
       setGameState(state);
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      ConnectFourClientSP.reset();
+      ConnectFourClientSP.stop();
+    };
   }, []);
 
   const handleClick = (col: number) => {
@@ -77,7 +79,7 @@ export const ConnectFourComponentSP: FC<ConnectFourComponentSPProps> = ({
     }
   }, [recentPiece]);
 
-  if (!gameState || !clientPlayer) {
+  if (!gameState) {
     return <Loader />;
   }
 
@@ -181,7 +183,7 @@ export const ConnectFourComponentSP: FC<ConnectFourComponentSPProps> = ({
             }}
           />
           <Text size="xs" fw={700}>
-            {clientPlayer!.name}
+            {playerName}
           </Text>
         </Center>
       )}
