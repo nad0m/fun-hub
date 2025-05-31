@@ -6759,7 +6759,6 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     identity-obj-proxy: "npm:^3.0.0"
     jsdom: "npm:^23.0.1"
-    plop: "npm:^4.0.1"
     postcss: "npm:^8.4.32"
     postcss-preset-mantine: "npm:1.12.3"
     postcss-simple-vars: "npm:^7.0.1"
@@ -14112,6 +14111,7 @@ __metadata:
   dependencies:
     concurrently: "npm:^8.2.2"
     eslint: "npm:^8.56.0"
+    plop: "npm:^4.0.1"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
