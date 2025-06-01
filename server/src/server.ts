@@ -5,8 +5,9 @@ import koaBody from 'koa-body';
 import { bodyParser } from '@koa/bodyparser';
 import { LobbyAPI, StorageAPI } from 'boardgame.io';
 import { getFirstAvailablePlayerID, getNumPlayers } from './game-utils/player';
-import { logJoinEvent } from './db';
+import { logJoinEvent } from './server-utils/db';
 import { collectGames } from './server-utils/games';
+import { FunHubInMemoryDb } from './core/fun-hub-in-memory-db';
 
 const server = Server({
   games: collectGames(),
@@ -15,6 +16,7 @@ const server = Server({
     Origins.LOCALHOST_IN_DEVELOPMENT,
     'https://nad0m.github.io',
   ],
+  db: new FunHubInMemoryDb(),
 });
 
 /**

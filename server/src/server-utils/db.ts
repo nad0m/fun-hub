@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database } from './database.types';
+import { Database } from '../database.types';
 import { config } from 'dotenv';
 
 config();
@@ -34,6 +34,25 @@ export const logJoinEvent = async (log: Log) => {
 
   if (error) {
     console.error('Failed to insert log:', error);
+    throw error;
+  }
+};
+
+export const logPostGameEvent = async (matchID: string, data: string) => {
+  const table = process.env.NODE_ENV === 'production' ? 'post_match_log_prod' : null;
+
+  if (!table) {
+    return;
+  }
+
+  const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+  const { error } = await supabase.from(table).insert({
+    match_id: matchID,
+    log: data,
+  });
+
+  if (error) {
+    console.error('Failed to insert post-game log:', error);
     throw error;
   }
 };

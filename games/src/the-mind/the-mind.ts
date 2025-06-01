@@ -113,7 +113,6 @@ const phases: PhaseMap<TheMindState, Ctx> = {
   [CommonGamePhases.WinPhase]: {
     moves: {
       nextLevel: (G, { playOrder, random }) => {
-        console.log(G)
         const players: { [key: string]: TheMindPlayer } = {}
         playOrder.forEach(playerId => {
           players[playerId] = {

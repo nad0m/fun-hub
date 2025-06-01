@@ -69,6 +69,48 @@ export type Database = {
         }
         Relationships: []
       }
+      post_match_log_dev: {
+        Row: {
+          created_at: string
+          id: string
+          log: Json | null
+          match_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log?: Json | null
+          match_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log?: Json | null
+          match_id?: string
+        }
+        Relationships: []
+      }
+      post_match_log_prod: {
+        Row: {
+          created_at: string
+          id: string
+          log: Json | null
+          match_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log?: Json | null
+          match_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log?: Json | null
+          match_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
