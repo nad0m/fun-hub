@@ -7,8 +7,8 @@ import {
   ListMatchesOpts,
 } from 'boardgame.io/dist/types/src/server/db/base';
 import { Sync } from 'boardgame.io/internal';
-import { logPostGameEvent } from 'src/server-utils/db';
-import { CommonGamePhases } from '../../../games';
+import { logPostGameEvent } from '../server-utils/db';
+import { CommonGamePhases } from '../../../games/src';
 
 /**
  * InMemory data storage.
